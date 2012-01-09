@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-TARGET = iarc
+TARGET = qDebugger
 TEMPLATE = app
 
 CONFIG += QWT
