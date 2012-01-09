@@ -1,0 +1,8 @@
+target remote localhost:3333
+monitor reset halt
+monitor poll
+monitor stm32f1x mass_erase 0
+monitor flash write_image main.elf
+file main.elf
+break main
+
