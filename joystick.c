@@ -16,7 +16,7 @@ void joystick_setup() {
 	joystick[7]=0;
 }
 
-void joystick_exti(u8 n, u8 estado, u16 time) {
+void joystick_exti(u8 n, u16 time) {
     static u16 previous_time=0;
     u16 time_delta;
 

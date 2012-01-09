@@ -92,7 +92,7 @@ int main(void)
 		static u32 temp32 = 0;
 		int altura=0, giro_x=0, giro_y=0, giro_z=0;
 		static u32 timer_old=0;
-		static u32 timer_count=0;
+//		static u32 timer_count=0;
 //		static u32 timer_count2=0;
 		u32 timer;
 //		u16 ejecuto=0;
@@ -196,8 +196,6 @@ int main(void)
 }
 
 #define printf_blocking(...) sprintf(__VA_ARGS__); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i])
-register int R0 __asm__ ("r0");
-register int R1 __asm__ ("r1");
 
 
 static inline uint32_t read_lr(void)
@@ -207,113 +205,86 @@ static inline uint32_t read_lr(void)
        return ret;
 }
 
-void nmi_handler(void) {
-  char s[50];
-  int i;
-
-  printf_blocking(s, "[NMI fault handler]\n");
-}
-
-void mem_manage_handler(void) {
-  char s[50];
-  int i;
-
-  printf_blocking(s, "[MEM fault handler]\n");
-}
-
-void bus_fault_handler(void) {
-  char s[50];
-  int i;
-
-  printf_blocking(s, "[BUS fault handler]\n");
-}
-
-void usage_fault_handler(void) {
-  char s[50];
-  int i;
-
-  printf_blocking(s, "[USAGE fault handler]\n");
-}
-
-
 void hard_fault_handler(void) {
-//    printf("Error: hard_fault_handler() !\r\n");
-char s[100];
-int i,j;
+	//    printf("Error: hard_fault_handler() !\r\n");
+	register int R0 __asm__ ("r0");
+	register int R1 __asm__ ("r1");
+	char s[100];
+	int i,j;
 
-for(j=0; j<10; j++) {
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	for (i = 0; i < 800000; i++)    /* Wait a bit. */
-		__asm__("nop");
-}
+	for(j=0; j<10; j++) {
+		gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
+		for (i = 0; i < 800000; i++)    /* Wait a bit. */
+			__asm__("nop");
+	}
 
-printf_blocking(s, "[Hard fault handler]\r\n");
+	printf_blocking(s, "[Hard fault handler]\r\n");
 
-if(SCB_HFSR_VECTTBL & SCB_HFSR) {
-  printf_blocking(s, "SCB_HFSR_VECTTBL: Bus Fault on vector table read.\r\n");
-}
+	if(SCB_HFSR_VECTTBL & SCB_HFSR) {
+	  printf_blocking(s, "SCB_HFSR_VECTTBL: Bus Fault on vector table read.\r\n");
+	}
 
-/*
-SCB_CFSR_DIVBYZERO   
-SCB_CFSR_UNALIGNED
-SCB_CFSR_NOCP
-SCB_CFSR_INVPC
-SCB_CFSR_INVSTATE
-SCB_CFSR_UNDEFINSTR
-*/
-if(SCB_CFSR_BFARVALID & SCB_CFSR) {
-  printf_blocking(s, "SCB_CFSR_BFARVALID: BFAR holds a valid fault address.\r\n");
-}
-if(SCB_CFSR_STKERR & SCB_CFSR) {
-  printf_blocking(s, "STKERR\r\n");
-}
-if(SCB_CFSR_UNSTKERR & SCB_CFSR) {
-  printf_blocking(s, "UNSTKERR\r\n");
-}
-if(SCB_CFSR_IMPRECISERR & SCB_CFSR) {
-  printf_blocking(s, "IMPRECISERR\r\n");
-}
-if(SCB_CFSR_PRECISERR & SCB_CFSR) {
-  printf_blocking(s, "SCB_CFSR_PRECISERR: A data bus error has occurred,");
-  printf_blocking(s, ", and the PC value stacked for the exception return ");
-  printf_blocking(s, "points to the instruction that caused the fautl.\r\n");
-}
-if(SCB_CFSR_IBUSERR & SCB_CFSR) {
-  printf_blocking(s, "IBUSERR\r\n");
-}
-if(SCB_CFSR_MMARVALID & SCB_CFSR) {
-  printf_blocking(s, "MMARVALID\r\n");
-}
-if(SCB_CFSR_MSTKERR & SCB_CFSR) {
-  printf_blocking(s, "MSTKERR\r\n");
-}
-if(SCB_CFSR_MUNSTKERR & SCB_CFSR) {
-  printf_blocking(s, "SCB_CFSR_MUNSTKERR: Unstacking for an exception return has caused");
-  printf_blocking(s, " one or more access violations\r\n");
-}
-if(SCB_CFSR_DACCVIOL & SCB_CFSR) {
-  printf_blocking(s, "SCB_CFSR_DACCVIOL: The processor attempted a load or store at a");
-  printf_blocking(s, " location that does not permit the operation.\r\n");
-}
+	/*
+	SCB_CFSR_DIVBYZERO   
+	SCB_CFSR_UNALIGNED
+	SCB_CFSR_NOCP
+	SCB_CFSR_INVPC
+	SCB_CFSR_INVSTATE
+	SCB_CFSR_UNDEFINSTR
+	*/
+	if(SCB_CFSR_BFARVALID & SCB_CFSR) {
+	  printf_blocking(s, "SCB_CFSR_BFARVALID: BFAR holds a valid fault address.\r\n");
+	}
+	if(SCB_CFSR_STKERR & SCB_CFSR) {
+	  printf_blocking(s, "STKERR\r\n");
+	}
+	if(SCB_CFSR_UNSTKERR & SCB_CFSR) {
+	  printf_blocking(s, "UNSTKERR\r\n");
+	}
+	if(SCB_CFSR_IMPRECISERR & SCB_CFSR) {
+	  printf_blocking(s, "IMPRECISERR\r\n");
+	}
+	if(SCB_CFSR_PRECISERR & SCB_CFSR) {
+	  printf_blocking(s, "SCB_CFSR_PRECISERR: A data bus error has occurred,");
+	  printf_blocking(s, ", and the PC value stacked for the exception return ");
+	  printf_blocking(s, "points to the instruction that caused the fautl.\r\n");
+	}
+	if(SCB_CFSR_IBUSERR & SCB_CFSR) {
+	  printf_blocking(s, "IBUSERR\r\n");
+	}
+	if(SCB_CFSR_MMARVALID & SCB_CFSR) {
+	  printf_blocking(s, "MMARVALID\r\n");
+	}
+	if(SCB_CFSR_MSTKERR & SCB_CFSR) {
+	  printf_blocking(s, "MSTKERR\r\n");
+	}
+	if(SCB_CFSR_MUNSTKERR & SCB_CFSR) {
+	  printf_blocking(s, "SCB_CFSR_MUNSTKERR: Unstacking for an exception return has caused");
+	  printf_blocking(s, " one or more access violations\r\n");
+	}
+	if(SCB_CFSR_DACCVIOL & SCB_CFSR) {
+	  printf_blocking(s, "SCB_CFSR_DACCVIOL: The processor attempted a load or store at a");
+	  printf_blocking(s, " location that does not permit the operation.\r\n");
+	}
 
-if(SCB_CFSR_IACCVIOL & SCB_CFSR) {
-  printf_blocking(s, "SCB_CFSR_IACCVIOL: The processor attempted an instruction fetch from");
-  printf_blocking(s, " a location that does not permit execution.\r\n");
-}
+	if(SCB_CFSR_IACCVIOL & SCB_CFSR) {
+	  printf_blocking(s, "SCB_CFSR_IACCVIOL: The processor attempted an instruction fetch from");
+	  printf_blocking(s, " a location that does not permit execution.\r\n");
+	}
 
-printf_blocking(s, "SCB_CFSR: 0x%lx\r\n", SCB_CFSR);
-printf_blocking(s, "SCB_BFAR: 0x%08lx\r\n", SCB_BFAR);
+	printf_blocking(s, "SCB_CFSR: 0x%lx\r\n", SCB_CFSR);
+	printf_blocking(s, "SCB_BFAR: 0x%08lx\r\n", SCB_BFAR);
 
-asm( "MRS     R0,PSP");
-asm( "LDR     R1,[R0,#24]");
-sprintf(s, "R0(PSP) = %lx\r\nR1(PC) = %lx\r\n", R0, R1); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i]);
-//r0 = R0;
-//printf_blocking(s, "R0(PSP) = %x\r\n", r0);
-//sprintf(s, "R1(PC) = %x\r\n", R1); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i]);
-//r1 = R1;
-//printf_blocking(s, "R1(PC) = %x\r\n", r1);
+	asm( "MRS     R0,PSP");
+	asm( "LDR     R1,[R0,#24]");
+	sprintf(s, "R0(PSP) = %x\r\nR1(PC) = %x\r\n", R0, R1); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i]);
+	//r0 = R0;
+	//printf_blocking(s, "R0(PSP) = %x\r\n", r0);
+	//sprintf(s, "R1(PC) = %x\r\n", R1); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i]);
+	//r1 = R1;
+	//printf_blocking(s, "R1(PC) = %x\r\n", r1);
 
-    while(1);
+	while(1);
 }
 
 void clock_setup(void)

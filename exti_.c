@@ -79,22 +79,20 @@ void exti9_5_isr(void) {
 	u16 EXTI_PR_ = EXTI_PR;
 	exti_reset_request(EXTI_PR_ & (EXTI6|GPIO7|GPIO8|GPIO9));
 	do {
-		u16 port = gpio_port_read(GPIOC);
 		u16 time = READ_TIMER_1;
-
 		if(EXTI_PR_&GPIO6) {
-			joystick_exti(4, port&GPIO6 ? 1:0, time);
+			joystick_exti(4, time);
 		}
 		if(EXTI_PR_&GPIO7) {
-			joystick_exti(5, port&GPIO7 ? 1:0, time);
+			joystick_exti(5, time);
 		}
 
 		if(EXTI_PR_&GPIO8) {
-			joystick_exti(6, port&GPIO8 ? 1:0, time);
+			joystick_exti(6, time);
 		}
 
 		if(EXTI_PR_&GPIO9) {
-			joystick_exti(7, port&GPIO9 ? 1:0, time);
+			joystick_exti(7, time);
 		}
 		EXTI_PR_ = EXTI_PR;
 		exti_reset_request(EXTI_PR_ & (EXTI6|GPIO7|GPIO8|GPIO9));
@@ -105,20 +103,18 @@ void exti15_10_isr(void) {
 	u16 EXTI_PR_ = EXTI_PR;
 	exti_reset_request(EXTI_PR_ & (EXTI12|GPIO13|GPIO14|GPIO15));
 	do {
-		u16 port = gpio_port_read(GPIOB);
 		u16 time = READ_TIMER_1;
-
 		if(EXTI_PR_&GPIO15) {
-			joystick_exti(3, port&GPIO15 ? 1:0, time);
+			joystick_exti(3, time);
 		}
 		if(EXTI_PR_&GPIO14) {
-			joystick_exti(2, port&GPIO14 ? 1:0, time);
+			joystick_exti(2, time);
 		}
 		if(EXTI_PR_&GPIO13) {
-			joystick_exti(0, port&GPIO13 ? 1:0, time);
+			joystick_exti(0, time);
 		}
 		if(EXTI_PR_&GPIO12) {
-			joystick_exti(1, port&GPIO12 ? 1:0, time);
+			joystick_exti(1, time);
 		}
 		EXTI_PR_ = EXTI_PR;
 		exti_reset_request(EXTI_PR_ & (EXTI12|GPIO13|GPIO14|GPIO15));

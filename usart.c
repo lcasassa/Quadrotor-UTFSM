@@ -10,16 +10,19 @@
 #include "flash_.h"
 #include "pid.h"
 
+#ifndef USART_BLOCKING
 #define BUFFER_SIZE 1024
 
 struct ring output_ring;
 u8 output_ring_buffer[BUFFER_SIZE];
+#endif
 
 void usart_setup(void)
 {
+#ifndef USART_BLOCKING
 	/* Initialize output ring buffer. */
 	ring_init(&output_ring, output_ring_buffer, BUFFER_SIZE);
-
+#endif
 	/* Enable the USART1 interrupt. */
 	nvic_enable_irq(NVIC_USART1_IRQ);
 
@@ -52,29 +55,14 @@ void usart1_isr(void)
 	if (((USART_CR1(USART1) & USART_CR1_RXNEIE) != 0) &&
 	    ((USART_SR(USART1) & USART_SR_RXNE) != 0)) {
 		char c;
-
-		/* Indicate that we got data. */
-		gpio_toggle(GPIOC, GPIO12);
-/*
-		// Retrieve the data from the peripheral.
-		if(c == 's') {
-			flash_save();
-		} else if(c == 'l') {
-			flash_load();
-			printf("load: %f\r\n", pid[0].P);
-		} else if(c == 'c') {
-			printf("%f\r\n", ++pid[0].P);
-		}
-
-		// Enable transmit interrupt so it sends back the data.
-*/
 		c = usart_recv(USART1);
-//		ring_write_ch(&output_ring, c);
-//		USART_CR1(USART1) |= USART_CR1_TXEIE;
-//printf("%c", c);
 		usart_new_char(c);
+#ifdef USART_BLOCKING
+		usart_send_blocking(USART1, c);
+#endif
 	}
 
+#ifndef USART_BLOCKING
 	/* Check if we were called because of TXE. */
 	if (((USART_CR1(USART1) & USART_CR1_TXEIE) != 0) &&
 	    ((USART_SR(USART1) & USART_SR_TXE) != 0)) {
@@ -91,24 +79,32 @@ void usart1_isr(void)
 			usart_send(USART1, data);
 		}
 	}
+#endif
 }
 
 int _write(int file, char *ptr, int len)
 {
-	int ret,i;
+#ifndef USART_BLOCKING
+	int ret;
+#else
+	int i;
+#endif
 
 	if (file == 1) {
-for(i=0; i<len;i++)
-usart_send_blocking(USART1, ptr[i]);
-/*
+#ifndef USART_BLOCKING
 		ret = ring_write(&output_ring, (u8 *)ptr, len);
 
 		if (ret < 0)
 			ret = -ret;
 
 		USART_CR1(USART1) |= USART_CR1_TXEIE;
-*/
-		return i;//ret;
+
+		return ret
+#else
+		for(i=0; i<len;i++)
+		usart_send_blocking(USART1, ptr[i]);
+		return i;
+#endif
 	}
 
 	errno = EIO;
@@ -210,13 +206,14 @@ void usart_new_char(char c) {
 				break;
 		}
 
+#ifndef USART_BLOCKING
 		//printf("%s", buffer);
 		ring_write_ch(&output_ring, '\n');
 		for(j=0; buffer[j] != 0; j++) {
 			ring_write_ch(&output_ring, buffer[j]);
 		}
 		USART_CR1(USART1) |= USART_CR1_TXEIE;
-
+#endif
 	}
 }
 
