@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <math.h>
+#include "ringbuffer.h"
 #include "main.h"
 #include "usart.h"
 #include "i2c.h"
@@ -24,7 +25,9 @@
 #include "kalman.h"
 #include "flash_.h"
 #include "pid.h"
+#include "parser.h"
 
+#define printf_blocking(...) sprintf(__VA_ARGS__); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i])
 
 int main(void)
 {
@@ -51,7 +54,7 @@ int main(void)
 	printf("*********************\r\n");
 
 	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
+	gpio_toggle(GPIOC, GPIO12);     // LED on/off
 
 	pid_setup(&pid[0]);
 	pid_setup(&pid[1]);
@@ -83,16 +86,19 @@ int main(void)
 	timer2_setup();
 	//systick_setup();
 	nvic_setup();
-
+/*
 	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
+	gpio_toggle(GPIOC, GPIO12);     // LED on/off 
 	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
+	gpio_toggle(GPIOC, GPIO12);     // LED on/off 
+*/
 	while (1) {
 		static u32 temp32 = 0;
 		int altura=0, giro_x=0, giro_y=0, giro_z=0;
-		static u32 timer_old=0;
+//		static u32 timer_old=0;
 		u32 timer;
+		s16 joystick_[8]={0,0,0,0,0,0,0,0};
+//		u8 i=0;
 
 		timer = timer2_counter;
 		if(timer2_flag) {
@@ -110,11 +116,16 @@ int main(void)
 			}
 
 			if (temp32%5 == 0) { // 5 ms
+		//		set_primask();
+				for(i=0;i<8;i++) {
+					joystick_[i] = joystick[i];
+				}
+		//		reset_primask();
 				//int altura, gyro_x, gyro_y, gyro_z;
-				altura = joystick[2];
-				giro_x = (int)(pid_update(&pid[0], ((float)(joystick[0]-500))/30.0, k[0].angle*180/M_PI)*100.0);
-				giro_y = (int)(pid_update(&pid[1], ((float)(joystick[1]-500))/30.0, k[1].angle*180/M_PI)*100.0);
-				giro_z = joystick[3] - 500;
+				altura = joystick_[2];
+				giro_x = (int)(pid_update(&pid[0], ((float)(joystick_[0]-500))/30.0, k[0].angle*180/M_PI)*100.0);
+				giro_y = (int)(pid_update(&pid[1], ((float)(joystick_[1]-500))/30.0, k[1].angle*180/M_PI)*100.0);
+				giro_z = joystick_[3] - 500;
 
 				PWM1 = ( altura - giro_z - giro_x );
 				PWM2 = ( altura + giro_z + giro_y );
@@ -124,7 +135,11 @@ int main(void)
 			}
 
 			if (temp32 == 50) { // 10 ms
-				printf("%d %d %d 0 0\r\n", (int)(100*((float)(joystick[0]-500))/30.0), (int)(100.0*k[0].angle), giro_x);
+//				char s[20];
+				printf("%d %d %d 0 0\r\n", (int)(100*((float)(joystick_[0]-500))/30.0), (int)(100.0*k[0].angle*180/M_PI), giro_x);
+//				printf("%d %d %d %d %d %d %d %d\r\n", joystick_[0], joystick_[1], joystick_[2], joystick_[3], joystick_[4], joystick_[5], joystick_[6], joystick_[7]);
+//				printf("%d %d %d %d %d %d %d %d\r\n", joystick2[0], joystick2[1], joystick2[2], joystick2[3], joystick2[4], joystick2[5], joystick2[6], joystick2[7]);
+		//		printf_blocking(s, "0 0 0 0 0\r\n");
 
 				PWM5 = ((k[1].angle/M_PI*3600 + k[0].angle/M_PI*3600) + 1000) + 1000;
 				PWM6 = ((k[1].angle/M_PI*3600 - k[0].angle/M_PI*3600) + 1000) + 1000;
@@ -132,27 +147,28 @@ int main(void)
 			}
 
 
-			timer_old = timer;
+//			timer_old = timer;
 		}
+/*
+		if(usart_printf_flag) {
+			s32 data;
+			usart_printf_flag = 0;
+			while((data = ring_read_ch(&output_ring_2, NULL)) != -1) {
+				printf("%c", (char)data);
+				//putchar((char)data);
+			}
+		}
+*/
+		parser_check();
 	}
 
 	return 0;
 }
 
-#define printf_blocking(...) sprintf(__VA_ARGS__); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i])
 
-
-static inline uint32_t read_lr(void)
-{
-       register uint32_t ret;
-       asm volatile ("mrs %0, primask" : "=r" (ret));
-       return ret;
-}
 
 void hard_fault_handler(void) {
 	//    printf("Error: hard_fault_handler() !\r\n");
-	register int R0 __asm__ ("r0");
-	register int R1 __asm__ ("r1");
 	char s[100];
 	int i,j;
 
@@ -176,6 +192,9 @@ void hard_fault_handler(void) {
 	SCB_CFSR_INVSTATE
 	SCB_CFSR_UNDEFINSTR
 	*/
+	//printf_blocking(s, "SCB_CFSR: 0x%lx\r\n", SCB_CFSR);
+	//printf_blocking(s, "SCB_BFAR: 0x%08lx\r\n", SCB_BFAR);
+
 	if(SCB_CFSR_BFARVALID & SCB_CFSR) {
 	  printf_blocking(s, "SCB_CFSR_BFARVALID: BFAR holds a valid fault address.\r\n");
 	}
@@ -190,7 +209,7 @@ void hard_fault_handler(void) {
 	}
 	if(SCB_CFSR_PRECISERR & SCB_CFSR) {
 	  printf_blocking(s, "SCB_CFSR_PRECISERR: A data bus error has occurred,");
-	  printf_blocking(s, ", and the PC value stacked for the exception return ");
+	  printf_blocking(s, " and the PC value stacked for the exception return ");
 	  printf_blocking(s, "points to the instruction that caused the fautl.\r\n");
 	}
 	if(SCB_CFSR_IBUSERR & SCB_CFSR) {
@@ -216,14 +235,9 @@ void hard_fault_handler(void) {
 	  printf_blocking(s, " a location that does not permit execution.\r\n");
 	}
 
-	printf_blocking(s, "SCB_CFSR: 0x%lx\r\n", SCB_CFSR);
-	printf_blocking(s, "SCB_BFAR: 0x%08lx\r\n", SCB_BFAR);
 
-	asm( "MRS     R0,PSP");
-	asm( "LDR     R1,[R0,#24]");
-	sprintf(s, "R0(PSP) = %x\r\nR1(PC) = %x\r\n", R0, R1); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i]);
 
-	while(1);
+//	while(1);
 }
 
 void clock_setup(void)
