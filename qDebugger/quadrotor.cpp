@@ -58,28 +58,36 @@ void Quadrotor::recieve(QByteArray b) {
 
 }
 
-void Quadrotor::setX_P(quint16 value) {
+void Quadrotor::setX_PA(quint16 value) {
     send(QString("XP%1").arg(value).toAscii());
 }
 
-void Quadrotor::setX_I(quint16 value) {
+void Quadrotor::setX_IA(quint16 value) {
     send(QString("XI%1").arg(value).toAscii());
 }
 
-void Quadrotor::setX_D(quint16 value) {
-    send(QString("XD%1").arg(value).toAscii());
+void Quadrotor::setX_PG(quint16 value) {
+    send(QString("XG%1").arg(value).toAscii());
 }
 
-void Quadrotor::setY_P(quint16 value) {
+void Quadrotor::setX_IG(quint16 value) {
+    send(QString("XA%1").arg(value).toAscii());
+}
+
+void Quadrotor::setY_PA(quint16 value) {
     send(QString("YP%1").arg(value).toAscii());
 }
 
-void Quadrotor::setY_I(quint16 value) {
+void Quadrotor::setY_IA(quint16 value) {
     send(QString("YI%1").arg(value).toAscii());
 }
 
-void Quadrotor::setY_D(quint16 value) {
-    send(QString("YD%1").arg(value).toAscii());
+void Quadrotor::setY_PG(quint16 value) {
+    send(QString("YG%1").arg(value).toAscii());
+}
+
+void Quadrotor::setY_IG(quint16 value) {
+    send(QString("YA%1").arg(value).toAscii());
 }
 
 void Quadrotor::setZ_P(quint16 value) {
@@ -92,6 +100,22 @@ void Quadrotor::setZ_I(quint16 value) {
 
 void Quadrotor::setZ_D(quint16 value) {
     send(QString("ZD%1").arg(value).toAscii());
+}
+
+void Quadrotor::setE1_offset(quint16 value) {
+    send(QString("E1O%1").arg(value).toAscii());
+}
+
+void Quadrotor::setE1_ganancia(quint16 value) {
+    send(QString("E1G%1").arg(value).toAscii());
+}
+
+void Quadrotor::setE2_offset(quint16 value) {
+    send(QString("E2O%1").arg(value).toAscii());
+}
+
+void Quadrotor::setE2_ganancia(quint16 value) {
+    send(QString("E2G%1").arg(value).toAscii());
 }
 
 void Quadrotor::saveParameters() {

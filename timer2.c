@@ -29,6 +29,12 @@ void timer2_setup()
 	/* End timer value. If this value is reached an interrupt is generated */
 	timer_set_period(TIM2, TIMER2_PERIOD);
 
+/*
+	TIM2_CCMR1 |= TIM_CCMR1_CC1S_IN_TI1 | TIM_CCMR1_IC1F_CK_INT_N_8 | TIM_CCMR1_IC1PSC_OFF;
+	TIM2_CCER |= TIM_CCER_CC1P | TIM_CCER_CC1E;
+	timer_enable_irq(TIM2, TIM_DIER_CC1IE);
+*/
+
 	/* Update interrupt enable */
 	TIM_DIER(TIM2) |= TIM_DIER_UIE;
 

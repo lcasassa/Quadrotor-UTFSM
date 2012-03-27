@@ -11,6 +11,7 @@ extern volatile u8 timer2_flag;
 void timer2_setup();
 
 #define READ_TIMER_2 TIM_CNT(TIM2)
+//#define TIMER2_PERIOD 1000 // 1 ms
 #define TIMER2_PERIOD 1000 // 1 ms
 
 #endif

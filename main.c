@@ -26,26 +26,30 @@
 #include "flash_.h"
 #include "pid.h"
 #include "parser.h"
+#include "estabilizador.h"
+#include "gyro_futaba.h"
 
 #define printf_blocking(...) sprintf(__VA_ARGS__); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i])
+#define nop_delay() for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
 
 int main(void)
 {
 	long long int i;
+	int j;
 	clock_setup();
 	gpio_setup();
 	usart_setup();
 
 	// Delay for the xBee link to be ready
-	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
+	nop_delay();
 	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
+	nop_delay();
 	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
+	nop_delay();
 	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
+	nop_delay();
 	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
+	nop_delay();
 	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
 
 	printf("\r\n\r\n");
@@ -53,11 +57,14 @@ int main(void)
 	printf("* ADXL345 & ITG3200 *\r\n");
 	printf("*********************\r\n");
 
-	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
+	nop_delay();
 	gpio_toggle(GPIOC, GPIO12);     // LED on/off
 
 	pid_setup(&pid[0]);
 	pid_setup(&pid[1]);
+	pid_setup(&pid[2]);
+	pid_setup(&pid[3]);
+	
 
 	kalman_setup();
 
@@ -81,6 +88,7 @@ int main(void)
 	exti_setup();
 
 	flash_load();
+	estabilizador_setup();
 
 	// Enable interrupts
 	timer2_setup();
@@ -93,11 +101,14 @@ int main(void)
 	gpio_toggle(GPIOC, GPIO12);     // LED on/off 
 */
 	while (1) {
+	//	static u16 count=0;
 		static u32 temp32 = 0;
+		static s32 gyroscope_sum[3] = {0,0,0};
 		int altura=0, giro_x=0, giro_y=0, giro_z=0;
 //		static u32 timer_old=0;
 		u32 timer;
 		s16 joystick_[8]={0,0,0,0,0,0,0,0};
+		s16 gyro_futaba_=0;
 //		u8 i=0;
 
 		timer = timer2_counter;
@@ -106,43 +117,92 @@ int main(void)
 
 			temp32++;
 
-			if (temp32%2 == 0) { // 2 ms
+			if ((temp32%2) == 0) { // 2 ms
 		#ifndef I2C_OFF
 				ADXL345_getValues();
 				ITG3200_getValues();
 		#endif
 				KalmanUpdate(0);
 				KalmanUpdate(1);//&kalman[0], 180*atan2(acelerometer[1],acelerometer[2])/M_PI, (double)gyroscope[0]/14.375);
+				for(j=0; j<3; j++) {
+					gyroscope_sum[j] += gyroscope[j];
+				}
 			}
 
-			if (temp32%5 == 0) { // 5 ms
+			if ((temp32%5) == 0) { // 5 ms
+				s32 motor[4];
+//				TIM4_CNT = 1;
 		//		set_primask();
 				for(i=0;i<8;i++) {
-					joystick_[i] = joystick[i];
+					joystick_[i] = joystick[i]*2;
 				}
+				PWM5 = joystick_[3] + 2000;
+				gyro_futaba_ = gyro_futaba;
 		//		reset_primask();
 				//int altura, gyro_x, gyro_y, gyro_z;
-				altura = joystick_[2];
-				giro_x = (int)(pid_update(&pid[0], ((float)(joystick_[0]-500))/30.0, k[0].angle*180/M_PI)*100.0);
-				giro_y = (int)(pid_update(&pid[1], ((float)(joystick_[1]-500))/30.0, k[1].angle*180/M_PI)*100.0);
-				giro_z = joystick_[3] - 500;
+				altura = joystick_[2]+2000;
+				giro_x = (int)(pid_update(&pid[0], ((float)(joystick_[0]-1000))*2, gyroscope[0]));
+				giro_y = (int)(pid_update(&pid[1], ((float)(joystick_[1]-1000))*2, gyroscope[1]));
+				giro_z = gyro_futaba_ - 1000;
+				giro_z /= 4;
 
-				PWM1 = ( altura - giro_z - giro_x );
-				PWM2 = ( altura + giro_z + giro_y );
-				PWM3 = ( altura - giro_z + giro_x );
-				PWM4 = ( altura + giro_z - giro_y );
+//printf("a%d\r\n", giro_z);
+
+				
+				motor[0] = ( altura - giro_z + giro_x );
+				motor[1] = ( altura + giro_z + giro_y );
+				motor[2] = ( altura - giro_z - giro_x );
+				motor[3] = ( altura + giro_z - giro_y );
+	
+				for(j=0; j < 4; j++) {
+					if(motor[j]<000) motor[j]=000;
+					if(motor[j]>4000) motor[j]=4000;
+				}
+
+//motor[0]=0;
+//motor[1]=0;
+//motor[2]=0;
+//motor[3]=0;
+
+				if(joystick_[4] > 200) {
+					PWM1 = motor[1];
+					PWM2 = motor[2];
+					PWM3 = motor[0];
+					PWM4 = motor[3];
+				} else {
+					PWM1 = 2000;
+					PWM2 = 2000;
+					PWM3 = 2000;
+					PWM4 = 2000;
+				}
+
+				for(j=0; j<3; j++) {
+					gyroscope_sum[j] = 0;
+				}
 
 			}
 
-			if (temp32 == 50) { // 10 ms
+			if ((temp32%20) == 0) { // 10 ms
+				estabilizador_loop(0,0);
+				// gyro_futaba
+				//PWM7 = joystick_[3] + 2000;
+			}
+
+			if ((temp32) >= 60) { // 10 ms
+printf("a%4d %4d %4d %4d\r\n", altura, giro_x, giro_y, giro_z);
+//				count += 10;
 //				char s[20];
-				printf("%d %d %d 0 0\r\n", (int)(100*((float)(joystick_[0]-500))/30.0), (int)(100.0*k[0].angle*180/M_PI), giro_x);
-//				printf("%d %d %d %d %d %d %d %d\r\n", joystick_[0], joystick_[1], joystick_[2], joystick_[3], joystick_[4], joystick_[5], joystick_[6], joystick_[7]);
+//				printf("%d %d %d 0 0\r\n", (int)(100*((float)(joystick_[1]-500))/30.0), (int)(100.0*k[1].angle*180/M_PI), giro_y);
+
+//if(-50 < gyro_futaba_ && gyro_futaba < 2000)
+//printf("a: %d %d %d %d\r\n", altura, giro_x, giro_y, giro_z);
+			//	printf("%d %d %d %d %d %d %d %d\r\n", joystick_[0], joystick_[1], joystick_[2], joystick_[3], joystick_[4], joystick_[5], joystick_[6], joystick_[7]);
 //				printf("%d %d %d %d %d %d %d %d\r\n", joystick2[0], joystick2[1], joystick2[2], joystick2[3], joystick2[4], joystick2[5], joystick2[6], joystick2[7]);
 		//		printf_blocking(s, "0 0 0 0 0\r\n");
 
-				PWM5 = ((k[1].angle/M_PI*3600 + k[0].angle/M_PI*3600) + 1000) + 1000;
-				PWM6 = ((k[1].angle/M_PI*3600 - k[0].angle/M_PI*3600) + 1000) + 1000;
+//				if(count>40000) count=0;
+				//printf("%u %u %u\r\n", (unsigned int)PWM5, (unsigned int)PWM6, 0);
+				//printf("%u %u %u %u\r\n", (unsigned int)PWM1/2, (unsigned int)PWM2/2, (unsigned int)PWM3/2, (unsigned int)PWM4/2);
 				temp32 = 0;
 			}
 

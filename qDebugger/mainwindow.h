@@ -35,12 +35,14 @@ private slots:
     void on_pushButton_Z_I_released();
     void on_pushButton_Z_P_released();
     void on_textEdit_textChanged();
-    void on_pushButton_Y_D_released();
-    void on_pushButton_Y_I_released();
-    void on_pushButton_Y_P_released();
-    void on_pushButton_X_D_released();
-    void on_pushButton_X_I_released();
-    void on_pushButton_X_P_released();
+    void on_pushButton_Y_PG_released();
+    void on_pushButton_Y_IG_released();
+    void on_pushButton_Y_PA_released();
+    void on_pushButton_Y_IA_released();
+    void on_pushButton_X_PG_released();
+    void on_pushButton_X_IG_released();
+    void on_pushButton_X_PA_released();
+    void on_pushButton_X_IA_released();
     void on_pushButton_2_clicked();
     void on_doubleSpinBox_var_acelerometro_valueChanged(double );
     void on_doubleSpinBox_var_bias_valueChanged(double );
@@ -54,6 +56,12 @@ private slots:
     void serialTextSend(QByteArray s);
 
     void on_pushButton_4_clicked();
+
+    void on_spinBox_E1_offset_valueChanged(int arg1);
+    void on_spinBox_E1_ganancia_valueChanged(int arg1);
+    void on_spinBox_E2_offset_valueChanged(int arg1);
+    void on_spinBox_E2_ganancia_valueChanged(int arg1);
+
 
 private:
     Ui::MainWindow *ui;

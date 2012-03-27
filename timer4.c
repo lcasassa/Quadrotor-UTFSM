@@ -5,6 +5,7 @@
 void timer4_setup(void)
 {
 	rcc_peripheral_enable_clock(&RCC_APB1ENR, RCC_APB1ENR_TIM4EN);
+	rcc_peripheral_enable_clock(&RCC_APB2ENR, RCC_APB2ENR_IOPBEN);
 
 	gpio_set_mode(GPIOB, GPIO_MODE_OUTPUT_2_MHZ, GPIO_CNF_OUTPUT_ALTFN_PUSHPULL, GPIO6 | GPIO7 | GPIO8 | GPIO9);
 
@@ -13,7 +14,7 @@ void timer4_setup(void)
 	/* Prescaler */
 	TIM4_PSC = 36; // 72MHz/36 = 2MHz => 2000clk -> 1ms
 	/* Period */
-	TIM4_ARR = 40000; // periodo del pwm 20ms
+	TIM4_ARR = 40000/2; // periodo del pwm 20ms
 	TIM4_EGR = TIM_EGR_UG;
 
 	/* ---- */

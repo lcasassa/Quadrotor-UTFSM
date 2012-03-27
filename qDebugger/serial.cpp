@@ -85,7 +85,9 @@ void Serial::readyRead() {
             (*out) << "\n";
 
             if(ok) {
-                qWarning("%s", list[i].data());
+                if(datos.size() == 4)
+                        qWarning("%s", list[i].data());
+                else
                 emit nuevosDatos(datos);
             }
 

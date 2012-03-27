@@ -348,40 +348,50 @@ void MainWindow::serialTextSend(QByteArray b) {
 
 
 //#define BACKGROUND_BUTTON_COLOR "background-color: rgb(255, 0, 0)"
-void MainWindow::on_pushButton_X_P_released() {
+void MainWindow::on_pushButton_X_PG_released() {
 //    ui->pushButton_X_P->setStyleSheet(BACKGROUND_BUTTON_COLOR);
-    quadrotor->setX_P((quint16)ui->spinBox_X_P->value());
+    quadrotor->setX_PG((quint16)ui->spinBox_X_PG->value());
  //   serial->send(QString("XP%1").arg(ui->spinBox_X_P->value()));
 }
 
-void MainWindow::on_pushButton_X_I_released() {
+void MainWindow::on_pushButton_X_IG_released() {
 //    ui->pushButton_X_I->setStyleSheet(BACKGROUND_BUTTON_COLOR);
-    quadrotor->setX_I((quint16)ui->spinBox_X_I->value());
+    quadrotor->setX_IG((quint16)ui->spinBox_X_IG->value());
 //    serial->send(QString("XI%1").arg(ui->spinBox_X_I->value()));
 }
 
-void MainWindow::on_pushButton_X_D_released() {
+void MainWindow::on_pushButton_X_PA_released() {
 //    ui->pushButton_X_D->setStyleSheet(BACKGROUND_BUTTON_COLOR);
-    quadrotor->setX_D((quint16)ui->spinBox_X_D->value());
+    quadrotor->setX_PA((quint16)ui->spinBox_X_PA->value());
 //    serial->send(QString("XD%1").arg(ui->spinBox_X_D->value()));
 }
 
-void MainWindow::on_pushButton_Y_P_released() {
+void MainWindow::on_pushButton_X_IA_released()
+{
+    quadrotor->setX_IA((quint16)ui->spinBox_X_IA->value());
+}
+
+void MainWindow::on_pushButton_Y_PG_released() {
 //    ui->pushButton_Y_P->setStyleSheet(BACKGROUND_BUTTON_COLOR);
-    quadrotor->setY_P((quint16)ui->spinBox_Y_P->value());
+    quadrotor->setY_PG((quint16)ui->spinBox_Y_PG->value());
 //    serial->send(QString("YP%1").arg(ui->spinBox_Y_P->value()));
 }
 
-void MainWindow::on_pushButton_Y_I_released() {
+void MainWindow::on_pushButton_Y_IG_released() {
 //    ui->pushButton_Y_I->setStyleSheet(BACKGROUND_BUTTON_COLOR);
-    quadrotor->setY_I((quint16)ui->spinBox_Y_I->value());
+    quadrotor->setY_IG((quint16)ui->spinBox_Y_IG->value());
 //    serial->send(QString("YI%1").arg(ui->spinBox_Y_I->value()));
 }
 
-void MainWindow::on_pushButton_Y_D_released() {
+void MainWindow::on_pushButton_Y_PA_released() {
 //    ui->pushButton_Y_D->setStyleSheet(BACKGROUND_BUTTON_COLOR);
-    quadrotor->setY_D((quint16)ui->spinBox_Y_D->value());
+    quadrotor->setY_PA((quint16)ui->spinBox_Y_PA->value());
 //    serial->send(QString("YD%1").arg(ui->spinBox_Y_D->value()));
+}
+
+void MainWindow::on_pushButton_Y_IA_released()
+{
+    quadrotor->setY_IA((quint16)ui->spinBox_Y_IA->value());
 }
 
 #define TEXT_SIZE 1000
@@ -411,3 +421,24 @@ void MainWindow::on_pushButton_4_clicked()
 {
     quadrotor->getParameters();
 }
+
+void MainWindow::on_spinBox_E1_offset_valueChanged(int arg1)
+{
+    quadrotor->setE1_offset((quint16)arg1);
+}
+
+void MainWindow::on_spinBox_E1_ganancia_valueChanged(int arg1)
+{
+    quadrotor->setE1_ganancia((quint16)arg1);
+}
+
+void MainWindow::on_spinBox_E2_offset_valueChanged(int arg1)
+{
+    quadrotor->setE2_offset((quint16)arg1);
+}
+
+void MainWindow::on_spinBox_E2_ganancia_valueChanged(int arg1)
+{
+    quadrotor->setE2_ganancia((quint16)arg1);
+}
+

@@ -10,7 +10,8 @@ void ITG3200_setup() {
 	int return_value;
 
 	//Set internal clock to 1kHz with 188Hz LPF and Full Scale(+-2000) to 3 for proper operation
-	return_value = i2c_write(ITG_ADDR, DLPF_FS, DLPF_FS_SEL_0|DLPF_FS_SEL_1|DLPF_CFG_0);
+//	return_value = i2c_write(ITG_ADDR, DLPF_FS, DLPF_FS_SEL_0|DLPF_FS_SEL_1);//|DLPF_CFG_0);
+	return_value = i2c_write(ITG_ADDR, DLPF_FS, DLPF_FS_SEL_0|DLPF_FS_SEL_1|DLPF_CFG_0|DLPF_CFG_1|DLPF_CFG_2);
 #ifdef ITG3200_PRINTF_ERROR
 	if(return_value < 1) {
 		printf("%s (%d): i2c_write(ITG_ADDR, DLPF_FS, DLPF_FS_SEL_0|DLPF_FS_SEL_1|DLPF_CFG_1): return_value: %d\r\n", __FILE__, __LINE__, return_value);

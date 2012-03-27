@@ -4,6 +4,7 @@
 #include <libopencm3/stm32/exti.h>
 #include "exti_.h"
 #include "joystick.h"
+#include "gyro_futaba.h"
 #include "timer1.h"
 #include <stdio.h>
 
@@ -49,7 +50,7 @@ void exti_setup() {
 
 	gpio_set_mode(GPIOC, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO9);
 	exti_select_source(EXTI9, GPIOC);
-	exti_set_trigger(EXTI9, EXTI_TRIGGER_RISING);
+	exti_set_trigger(EXTI9, EXTI_TRIGGER_RISING); //EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI9);
 
 	gpio_set_mode(GPIOB, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO15);
@@ -80,23 +81,23 @@ void exti9_5_isr(void) {
 	exti_reset_request(EXTI_PR_ & (EXTI6|GPIO7|GPIO8|GPIO9));
 	do {
 		u16 time = READ_TIMER_1;
-		if(EXTI_PR_&GPIO6) {
+		if(EXTI_PR_ & GPIO6) {
 			joystick_exti(4, time);
 		}
-		if(EXTI_PR_&GPIO7) {
+		if(EXTI_PR_ & GPIO7) {
 			joystick_exti(5, time);
 		}
 
-		if(EXTI_PR_&GPIO8) {
+		if(EXTI_PR_ & GPIO8) {
 			joystick_exti(6, time);
 		}
 
-		if(EXTI_PR_&GPIO9) {
+		if(EXTI_PR_ & GPIO9) {
 			joystick_exti(7, time);
 		}
 		EXTI_PR_ = EXTI_PR;
 		exti_reset_request(EXTI_PR_ & (EXTI6|GPIO7|GPIO8|GPIO9));
-	} while(EXTI_PR_&(GPIO6|GPIO7|GPIO8|GPIO9));
+	} while(EXTI_PR_ & (GPIO6|GPIO7|GPIO8|GPIO9));
 }
 
 void exti15_10_isr(void) {
