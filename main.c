@@ -32,40 +32,34 @@
 #define printf_blocking(...) sprintf(__VA_ARGS__); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i])
 #define nop_delay() for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
 
+#define LED_ON()     gpio_set   (GPIOC, GPIO12)
+#define LED_OFF()    gpio_clear (GPIOC, GPIO12)
+#define LED_TOGGLE() gpio_toggle(GPIOC, GPIO12)
+
 int main(void)
 {
 	long long int i;
 	int j;
+
 	clock_setup();
+
 	gpio_setup();
+	LED_ON();
+
 	usart_setup();
 
-	// Delay for the xBee link to be ready
-	nop_delay();
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	nop_delay();
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	nop_delay();
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	nop_delay();
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-	nop_delay();
-	gpio_toggle(GPIOC, GPIO12);     /* LED on/off */
-
 	printf("\r\n\r\n");
-	printf("*********************\r\n");
-	printf("* ADXL345 & ITG3200 *\r\n");
-	printf("*********************\r\n");
-
-	nop_delay();
-	gpio_toggle(GPIOC, GPIO12);     // LED on/off
+	printf("************************\r\n");
+	printf("*   Quadrotor  UTFSM   *\r\n");
+	printf("* %s %s *", __DATE__, __TIME__);
+//	printf("* Mar 12 2012 10:27:34 *");
+	printf("************************\r\n");
 
 	pid_setup(&pid[0]);
 	pid_setup(&pid[1]);
 	pid_setup(&pid[2]);
 	pid_setup(&pid[3]);
 	
-
 	kalman_setup();
 
 	// ESC: 4 output PWM
@@ -94,12 +88,10 @@ int main(void)
 	timer2_setup();
 	//systick_setup();
 	nvic_setup();
-/*
-	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
-	gpio_toggle(GPIOC, GPIO12);     // LED on/off 
-	for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
-	gpio_toggle(GPIOC, GPIO12);     // LED on/off 
-*/
+
+	gpio_toggle(GPIOC, GPIO12);
+	LED_OFF();
+
 	while (1) {
 	//	static u16 count=0;
 		static u32 temp32 = 0;
@@ -131,43 +123,37 @@ int main(void)
 
 			if ((temp32%5) == 0) { // 5 ms
 				s32 motor[4];
-//				TIM4_CNT = 1;
-		//		set_primask();
+				float omega_ref[2];
+
 				for(i=0;i<8;i++) {
 					joystick_[i] = joystick[i]*2;
 				}
 				PWM5 = joystick_[3] + 2000;
 				gyro_futaba_ = gyro_futaba;
-		//		reset_primask();
-				//int altura, gyro_x, gyro_y, gyro_z;
+
+
 				altura = joystick_[2]+2000;
-				giro_x = (int)(pid_update(&pid[0], ((float)(joystick_[0]-1000))*2, gyroscope[0]));
-				giro_y = (int)(pid_update(&pid[1], ((float)(joystick_[1]-1000))*2, gyroscope[1]));
+				omega_ref[0] = (int)(pid_update(&pid[2], ((float)(joystick_[0]-1000))*2, k[0].angle));
+				omega_ref[1] = (int)(pid_update(&pid[3], ((float)(joystick_[1]-1000))*2, k[1].angle));
+				giro_x = (int)(pid_update(&pid[0], omega_ref[0], gyroscope[0]));
+				giro_y = (int)(pid_update(&pid[1], omega_ref[1], gyroscope[1]));
 				giro_z = gyro_futaba_ - 1000;
-				giro_z /= 4;
+				giro_z /= 4; // Less range gain for futaba gyro
 
-//printf("a%d\r\n", giro_z);
-
-				
-				motor[0] = ( altura - giro_z + giro_x );
-				motor[1] = ( altura + giro_z + giro_y );
-				motor[2] = ( altura - giro_z - giro_x );
+				motor[0] = ( altura + giro_z + giro_y );
+				motor[1] = ( altura - giro_z - giro_x );
+				motor[2] = ( altura - giro_z + giro_x );
 				motor[3] = ( altura + giro_z - giro_y );
-	
+
 				for(j=0; j < 4; j++) {
-					if(motor[j]<000) motor[j]=000;
+					if(motor[j]<2000) motor[j]=2000;
 					if(motor[j]>4000) motor[j]=4000;
 				}
 
-//motor[0]=0;
-//motor[1]=0;
-//motor[2]=0;
-//motor[3]=0;
-
-				if(joystick_[4] > 200) {
-					PWM1 = motor[1];
-					PWM2 = motor[2];
-					PWM3 = motor[0];
+				if(joystick_[4] > 200) { // Emergency switch
+					PWM1 = motor[0];
+					PWM2 = motor[1];
+					PWM3 = motor[2];
 					PWM4 = motor[3];
 				} else {
 					PWM1 = 2000;
