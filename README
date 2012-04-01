@@ -5,5 +5,32 @@ Electronic engineering student UTFSM
 
 Based on Olimex STM32-H103 Header Board.
 
-Thanks to the libopencm3 proyect!
+1x Header Board for STM32 Cortex-M3                               - $ 40.95 US - http://www.sparkfun.com/products/8559
+1x IMU Digital Combo Board - 6 Degrees of Freedom ITG3200/ADXL345 - $ 64.95 US - http://www.sparkfun.com/products/10121
+2x XBee Pro 50mW Wire Antenna - Series 2 (ZigBee Mesh)            - $ 40.95 US - http://www.sparkfun.com/products/10421
+1x RX 8 channels walkera
+1x TX 6 channels walkera
+4x ESC with simon's firmware                                      - https://github.com/sim-/tgy
+4x Brushless motors                                               - AXI 2808/24
+2x APC 10x4.7 Slow Flyer Propeller                                - $ 2.99 US - http://www.amainhobbies.com/ APC10047
+2x APC 10 x 4.7 Slow Flyer Pusher Propeller                       - $ 4.19 US - http://www.amainhobbies.com/ APC10047SFP
+
+Do not forget the cables to connect everything.
+
+Thanks to the libopencm3 proyect for ther library!
+
+
+
+This is the control diagram for each axis:
+
+   / \    -------  / \    -------    --------      -------
+---| |----| PID |--| |----| PID |----| Quad |------| 1/s |--------
+   \ /    -------  \ /    -------    --------   |  -------   |
+    |               |                           |            |
+    |               -----------Gyro--------------            |
+    |                                                        |
+    ---------------------------Angle--------------------------
+
+With the gyro, the accelerometer and a kalman filter you can get the Angle.
+The input is the Angle reference given by the joystick.
 
