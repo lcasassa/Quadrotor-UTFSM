@@ -22,8 +22,11 @@ void nvic_setup()
 	nvic_enable_irq(NVIC_USART1_IRQ);
 	nvic_set_priority(NVIC_USART1_IRQ, 3);
 
-	nvic_enable_irq(NVIC_TIM2_IRQ);
-	nvic_set_priority(NVIC_TIM2_IRQ, 4);
+//	nvic_enable_irq(NVIC_TIM2_IRQ);
+//	nvic_set_priority(NVIC_TIM2_IRQ, 4);
+
+	nvic_enable_irq(NVIC_SYSTICK_IRQ);
+	nvic_set_priority(NVIC_SYSTICK_IRQ, 4);
 
 }
 

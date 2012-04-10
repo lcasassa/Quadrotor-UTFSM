@@ -28,6 +28,7 @@
 #include "parser.h"
 #include "estabilizador.h"
 #include "gyro_futaba.h"
+#include "systick.h"
 
 #define printf_blocking(...) sprintf(__VA_ARGS__); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i])
 #define nop_delay() for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
@@ -89,7 +90,7 @@ int main(void)
 
 	// Enable interrupts
 	timer2_setup();
-	//systick_setup();
+	systick_setup();
 	nvic_setup();
 
 	gpio_toggle(GPIOC, GPIO12);
@@ -123,9 +124,9 @@ int main(void)
 		s16 gyro_futaba_=0;
 //		u8 i=0;
 
-		timer = timer2_counter;
-		if(timer2_flag) {
-			timer2_flag = 0;
+		timer = systick_counter;
+		if(systick_flag) {
+			systick_flag = 0;
 
 			temp32++;
 
