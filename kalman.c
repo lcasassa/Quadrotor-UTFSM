@@ -95,7 +95,7 @@ void kalman_setup() {
     k[n].P[1][1] = 1.0;
     k[n].x_hat[0] = 0.0;
     k[n].x_hat[1] = 0.0;
-    k[n].P_medicion = 0.3;
+    k[n].P_medicion = 0.3*10;
     k[n].P_teta = 0.001;
     k[n].P_gyro_bias = 0.003;
     k[n].angle = 0;
@@ -111,12 +111,12 @@ void kalman_setup() {
     k[n].P[1][1] = 1.0;
     k[n].x_hat[0] = 0.0;
     k[n].x_hat[1] = 0.0;
-    k[n].P_medicion = 0.3;
+    k[n].P_medicion = 0.3*10;
     k[n].P_teta = 0.001;
     k[n].P_gyro_bias = 0.003;
 }
 
-void KalmanUpdate(u8 n) { //struct KALMAN *k, double teta, double gyro) {
+void KalmanUpdate(u8 n, s32 *acelerometer_average) { //struct KALMAN *k, double teta, double gyro) {
         double q, Pdot[2][2];
         double angle_err, C_0, PCt_0, PCt_1, E, K_0, K_1, t_0, t_1;                                               
 	//double J_[2][2], P_[2][2], x_hat_[2];
@@ -126,10 +126,10 @@ void KalmanUpdate(u8 n) { //struct KALMAN *k, double teta, double gyro) {
 
 	if(n==1) {
 		teta = atan2((double)-acelerometer[0],(double)acelerometer[2]);
-		gyro = (double)gyroscope[1]*M_PI/14.375/180;
+		gyro = (double)(gyroscope[1]-gyroscope_offset[1])*M_PI/14.375/180*1.05;
 	} else {
 		teta = atan2((double)acelerometer[1],(double)acelerometer[2]);
-		gyro = (double)gyroscope[0]*M_PI/14.375/180;
+		gyro = (double)(gyroscope[0]-gyroscope_offset[0])*M_PI/14.375/180*1.05;
 	}
 
 //	k = &kalman[0];
@@ -227,7 +227,7 @@ void KalmanUpdate(u8 n) { //struct KALMAN *k, double teta, double gyro) {
          *
          * Luckilly, E is <1,1>, so the inverse of E is just 1/E.
          */
-if(isnan(E) || E == 0) { long long int i; printf("nan!\r\n"); for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }}
+//if(isnan(E) || E == 0) { long long int i; printf("nan!\r\n"); for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }}
 
         K_0 = PCt_0 / E;
         K_1 = PCt_1 / E;

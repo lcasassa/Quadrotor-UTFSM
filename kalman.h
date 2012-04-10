@@ -53,6 +53,6 @@ struct KALMAN {
 extern struct KALMAN k[2];
 
 void kalman_setup();
-void KalmanUpdate(u8 n);//struct KALMAN *k, double teta, double gyro);
+void KalmanUpdate(u8 n, s32 *acelerometer_average);//struct KALMAN *k, double teta, double gyro);
 
 #endif

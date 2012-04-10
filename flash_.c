@@ -28,6 +28,18 @@ void flash_load() {
 	RESTORE(pid[1].I_sum_min, float, tmp_f);
 	RESTORE(pid[1].I_sum_max, float, tmp_f);
 
+	RESTORE(pid[2].P, float, tmp_f);
+	RESTORE(pid[2].I, float, tmp_f);
+	RESTORE(pid[2].D, float, tmp_f);
+	RESTORE(pid[2].I_sum_min, float, tmp_f);
+	RESTORE(pid[2].I_sum_max, float, tmp_f);
+
+	RESTORE(pid[3].P, float, tmp_f);
+	RESTORE(pid[3].I, float, tmp_f);
+	RESTORE(pid[3].D, float, tmp_f);
+	RESTORE(pid[3].I_sum_min, float, tmp_f);
+	RESTORE(pid[3].I_sum_max, float, tmp_f);
+
 	RESTORE(estabilizador[0].offset, u16, tmp_u16);
 	RESTORE(estabilizador[0].ganancia, float, tmp_f);
 
@@ -59,6 +71,18 @@ void flash_save() {
 	SAVE(pid[1].D);
 	SAVE(pid[1].I_sum_min);
 	SAVE(pid[1].I_sum_max);
+
+	SAVE(pid[2].P);
+	SAVE(pid[2].I);
+	SAVE(pid[2].D);
+	SAVE(pid[2].I_sum_min);
+	SAVE(pid[2].I_sum_max);
+
+	SAVE(pid[3].P);
+	SAVE(pid[3].I);
+	SAVE(pid[3].D);
+	SAVE(pid[3].I_sum_min);
+	SAVE(pid[3].I_sum_max);
 
 	SAVE(estabilizador[0].offset);
 	SAVE(estabilizador[0].ganancia);

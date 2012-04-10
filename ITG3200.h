@@ -4,6 +4,7 @@
 #include <libopencm3/cm3/common.h>
 
 extern s16 gyroscope[3];
+extern s32 gyroscope_offset[3];
 
 void ITG3200_setup();
 void ITG3200_getValues();

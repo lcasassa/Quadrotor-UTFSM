@@ -5,6 +5,7 @@
 //#define ITG3200_PRINTF_ERROR 1
 
 s16 gyroscope[3] = {0,0,0};
+s32 gyroscope_offset[3] = {0, 0, 0};
 
 void ITG3200_setup() {
 	int return_value;
