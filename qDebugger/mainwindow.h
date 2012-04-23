@@ -63,6 +63,10 @@ private slots:
     void on_spinBox_E2_ganancia_valueChanged(int arg1);
 
 
+    void on_pushButton_Y_AB_2_released();
+
+    void on_pushButton_Y_AB_released();
+
 private:
     Ui::MainWindow *ui;
     Serial *serial;

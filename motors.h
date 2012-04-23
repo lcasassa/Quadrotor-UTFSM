@@ -4,6 +4,14 @@
 #include "timer4.h"
 
 void motors_setup();
-void motors_set(u8 number, s16 value);
+inline u16 motors_max_min(s32 value);
+
+#define MOTORS_MAX 3990
+#define MOTORS_MIN 1000
+
+#define motors_set1(v) PWM1 = motors_max_min(v);
+#define motors_set2(v) PWM2 = motors_max_min(v);
+#define motors_set3(v) PWM3 = motors_max_min(v);
+#define motors_set4(v) PWM4 = motors_max_min(v);
 
 #endif

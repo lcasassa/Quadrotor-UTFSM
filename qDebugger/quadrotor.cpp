@@ -102,6 +102,14 @@ void Quadrotor::setZ_D(quint16 value) {
     send(QString("ZD%1").arg(value).toAscii());
 }
 
+void Quadrotor::setX_AB(quint16 value) {
+    send(QString("XO%1").arg(value).toAscii());
+}
+
+void Quadrotor::setY_AB(quint16 value) {
+    send(QString("YO%1").arg(value).toAscii());
+}
+
 void Quadrotor::setE1_offset(quint16 value) {
     send(QString("E1O%1").arg(value).toAscii());
 }

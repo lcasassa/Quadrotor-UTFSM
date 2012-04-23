@@ -24,7 +24,10 @@ void joystick_exti(u8 n, u16 time) {
        	time_delta = TIMER1_PERIOD - (previous_time - time);
     }
     if(n==0) n=8;
-    joystick[n-1] = (time_delta - 2000)/2;
+    if(n==3) // throttle: 1ms to 2ms
+	joystick[n-1] = (time_delta - 2000); // 0 to 2000
+    else // all others centered on 1.5ms
+	joystick[n-1] = (time_delta - 3000); // -1000 a 1000
     previous_time = time;
 }
 

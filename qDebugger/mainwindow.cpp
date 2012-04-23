@@ -442,3 +442,13 @@ void MainWindow::on_spinBox_E2_ganancia_valueChanged(int arg1)
     quadrotor->setE2_ganancia((quint16)arg1);
 }
 
+
+void MainWindow::on_pushButton_Y_AB_2_released()
+{
+    quadrotor->setX_AB((quint16)ui->spinBox_X_AB->value());
+}
+
+void MainWindow::on_pushButton_Y_AB_released()
+{
+    quadrotor->setY_AB((quint16)ui->spinBox_Y_AB->value());
+}

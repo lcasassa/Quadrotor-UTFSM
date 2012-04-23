@@ -3,12 +3,22 @@
 
 #include <libopencm3/cm3/common.h>
 
-extern s16 gyroscope[3];
-extern s32 gyroscope_offset[3];
+extern float gyroscope[3];
+extern float gyroscope_offset[3];
+extern s8 gyroscope_is_calibrated;
+extern s8 gyroscope_is_calibration_checked;
 
 void ITG3200_setup();
 void ITG3200_getValues();
+void ITG3200_calibrate();
+void ITG3200_check_calibration();
 
+// CALIBRATION_THRESHOLD * 1.15/14.375 degrees in CALIBRATION_CHECK_TIME ms
+//                     1 * 1.15/14.375 degrees in                    500 ms
+//                                0.08 degrees in                    500 ms
+
+#define CALIBRATION_THRESHOLD 40
+#define CALIBRATION_CHECK_TIME 500
 
 
 /* ************************ Register map for the ITG3200 ****************************/

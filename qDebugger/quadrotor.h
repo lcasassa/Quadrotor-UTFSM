@@ -27,6 +27,8 @@ public slots:
     void setZ_P(quint16 value);
     void setZ_I(quint16 value);
     void setZ_D(quint16 value);
+    void setX_AB(quint16 value);
+    void setY_AB(quint16 value);
     void setE1_offset(quint16 value);
     void setE1_ganancia(quint16 value);
     void setE2_offset(quint16 value);

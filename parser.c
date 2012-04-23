@@ -8,6 +8,7 @@
 #include "flash_.h"
 #include "pid.h"
 #include "estabilizador.h"
+#include "alfabeta.h"
 
 u8 parser_flag = 0;
 
@@ -65,13 +66,13 @@ void parser_check() {
 				//sscanf(buffer+3,"%d", &value);
 				value = strtoul(buffer+4, NULL, 10);
 				estabilizador[index].offset = value;
-				printf("estabilizador offset index:%d value:%d\r\n", index, value);
+//				printf("estabilizador offset index:%d value:%d\r\n", index, value);
 				break;
 				case 'G':
 				//sscanf(buffer+3,"%d", &value);
 				value = strtoul(buffer+4, NULL, 10);
 				estabilizador[index].ganancia = (float)value/1000;
-				printf("estabilizador ganancia index:%d value:%d\r\n", index, value);
+//				printf("estabilizador ganancia index:%d value:%d\r\n", index, value);
 				break;
 			}
 			break;
@@ -97,6 +98,11 @@ void parser_check() {
 				value = strtoul(buffer+3, NULL, 10);
 				pid[0].I = ((float)value)/1000.0;
 				break;
+				case 'O':
+				//sscanf(buffer+3,"%d", &value);
+				value = strtoul(buffer+3, NULL, 10);
+				alfabeta[0].beta = ((float)value)/1000.0;
+				break;
 			}
 			break;
 			case 'Y':
@@ -120,6 +126,11 @@ void parser_check() {
 				//sscanf(buffer+3,"%d", &value);
 				value = strtoul(buffer+3, NULL, 10);
 				pid[1].I = ((float)value)/1000.0;
+				break;
+				case 'O':
+				//sscanf(buffer+3,"%d", &value);
+				value = strtoul(buffer+3, NULL, 10);
+				alfabeta[1].beta = ((float)value)/1000.0;
 				break;
 			}
 			break;

@@ -5,4 +5,5 @@ void clock_setup();
 void gpio_setup();
 void systick_setup();
 
+extern float angle[2];
 #endif

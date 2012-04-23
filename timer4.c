@@ -14,7 +14,7 @@ void timer4_setup(void)
 	/* Prescaler */
 	TIM4_PSC = 36; // 72MHz/36 = 2MHz => 2000clk -> 1ms
 	/* Period */
-	TIM4_ARR = 40000/2; // periodo del pwm 20ms
+	TIM4_ARR = 4000; // periodo del pwm 500 Hz -> 2000*1000/500 = 4000
 	TIM4_EGR = TIM_EGR_UG;
 
 	/* ---- */
@@ -26,7 +26,7 @@ void timer4_setup(void)
 	TIM4_CCER |= TIM_CCER_CC1E;
 
 	/* Capture compare value */
-	TIM4_CCR1 = 2000;
+	TIM4_CCR1 = 0;
 
 	/* ---- */
 	/* Output compare 2 mode and preload */
@@ -37,7 +37,7 @@ void timer4_setup(void)
 	TIM4_CCER |= TIM_CCER_CC2E;
 
 	/* Capture compare value */
-	TIM4_CCR2 = 2000;
+	TIM4_CCR2 = 0;
 
 	/* ---- */
 	/* Output compare 3 mode and preload */
@@ -48,7 +48,7 @@ void timer4_setup(void)
 	TIM4_CCER |= TIM_CCER_CC3E;
 
 	/* Capture compare value */
-	TIM4_CCR3 = 2000;
+	TIM4_CCR3 = 0;
 
 	/* ---- */
 	/* Output compare 4 mode and preload */
@@ -59,7 +59,7 @@ void timer4_setup(void)
 	TIM4_CCER |= TIM_CCER_CC4E;
 
 	/* Capture compare value */
-	TIM4_CCR4 = 2000;
+	TIM4_CCR4 = 0;
 
 	/* ---- */
 	/* ARR reload enable */
@@ -72,3 +72,4 @@ void timer4_setup(void)
 	TIM4_CR1 |= TIM_CR1_CEN;
 
 }
+

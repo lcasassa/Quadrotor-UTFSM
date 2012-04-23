@@ -2,6 +2,7 @@
 #include "flash_.h"
 #include "pid.h"
 #include "estabilizador.h"
+#include "alfabeta.h"
 #include <stdio.h>
 
 const u32 fla[256] __attribute__ ((section (".text\n\t#"), aligned(1024)));
@@ -45,6 +46,9 @@ void flash_load() {
 
 	RESTORE(estabilizador[1].offset, u16, tmp_u16);
 	RESTORE(estabilizador[1].ganancia, float, tmp_f);
+
+	RESTORE(alfabeta[0].beta, u16, tmp_u16);
+	RESTORE(alfabeta[1].beta, u16, tmp_u16);
 }
 
 #define SAVE(v) value = (u32*)&v; \
@@ -89,6 +93,9 @@ void flash_save() {
 
 	SAVE(estabilizador[1].offset);
 	SAVE(estabilizador[1].ganancia);
+
+	SAVE(alfabeta[0].beta);
+	SAVE(alfabeta[1].beta);
 
 	flash_lock();
 

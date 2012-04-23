@@ -96,7 +96,7 @@ void timer3_setup(void)
 	TIM3_CCER |= TIM_CCER_CC3E;
 
 	// Capture compare value 
-	TIM3_CCR3 = 3000;
+	TIM3_CCR3 = 0;
 
 	// ---- 
 	// Output compare 4 mode and preload 
@@ -107,7 +107,7 @@ void timer3_setup(void)
 	TIM3_CCER |= TIM_CCER_CC4E;
 
 	// Capture compare value 
-	TIM3_CCR4 = 3000;
+	TIM3_CCR4 = 0;
 
 	// ---- */
 	// ARR reload enable 
@@ -129,17 +129,4 @@ void tim3_isr(void) {
 	// clear flag
 	tmp = TIM3_CCR1;
 }
-
-/*
-void tim3_isr(void) {
-        //timer_clear_flag(TIM3, TIM_SR_UIF);
-        if(TIM3_SR & TIM_SR_CC1IF) {
-		printf("d%u\n", (unsigned int)TIM3_CCR1);
-	}
-        if(TIM3_SR & TIM_SR_CC1IF) {
-		printf("a\n");
-	}
-//	gyro_futaba_timer_capture(TIM3_CCR1);
-}
-*/
 
