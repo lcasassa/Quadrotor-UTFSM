@@ -30,12 +30,9 @@ void systick_setup(void)
         /* Start counting. */
         systick_counter_enable();
 }
-#define TEST_PIN2_ON gpio_set (GPIOC, GPIO1);
-#define TEST_PIN2_OFF gpio_clear (GPIOC, GPIO1);
 
 void sys_tick_handler(void)
 {
-TEST_PIN2_ON;
 	static u16 count=0;
 	s32 altura=0, giro_x=0, giro_y=0, giro_z=0;
 	s32 motor[4];
@@ -53,7 +50,6 @@ TEST_PIN2_ON;
 		} else {
 			ITG3200_check_calibration();
 		}
-TEST_PIN2_OFF;
 		return;
 	}
 	angle_gyro[0] += gyroscope[0]*1.15/14.375;
@@ -103,6 +99,5 @@ TEST_PIN2_OFF;
 		motors_set4(0);
 	}
 
-TEST_PIN2_OFF;
 }
 
