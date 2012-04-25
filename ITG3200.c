@@ -7,8 +7,8 @@
 
 float gyroscope[3] = {0,0,0};
 float gyroscope_offset[3] = {0, 0, 0};
-s8 gyroscope_is_calibrated = 0;
-s8 gyroscope_is_calibration_checked = 0;
+s8 volatile gyroscope_is_calibrated = 0;
+s8 volatile gyroscope_is_calibration_checked = 0;
 
 void ITG3200_setup() {
 	int return_value;

@@ -1,7 +1,7 @@
 #ifndef FLASH_H
 #define FLASH_H
 
-void flash_load();
+u8 flash_load();
 void flash_save();
 
 #endif

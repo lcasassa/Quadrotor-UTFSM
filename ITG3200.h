@@ -5,8 +5,8 @@
 
 extern float gyroscope[3];
 extern float gyroscope_offset[3];
-extern s8 gyroscope_is_calibrated;
-extern s8 gyroscope_is_calibration_checked;
+extern volatile s8 gyroscope_is_calibrated;
+extern volatile s8 gyroscope_is_calibration_checked;
 
 void ITG3200_setup();
 void ITG3200_getValues();

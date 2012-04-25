@@ -72,9 +72,11 @@ int main(void)
 	joystick_setup();
 	exti_setup();
 
-	flash_load();
 	alfabeta_setup();
 	estabilizador_setup();
+
+	if(flash_load()) printf("Restored from Flash\r\n");
+	else printf("Not restored from Flash\r\n");
 
 	// Enable interrupts
 	systick_setup();
@@ -92,6 +94,8 @@ int main(void)
 	motors_setup();
 	timer2_setup();
 	timer3_setup();
+
+	while(!gyroscope_is_calibration_checked);
 
 	while (1) {
 		static u32 temp32 = 0;

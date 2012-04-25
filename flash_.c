@@ -12,10 +12,15 @@ const u32 fla[256] __attribute__ ((section (".text\n\t#"), aligned(1024)));
 #define RESTORE(v, type, tmp) tmp = (type*)&fla[i++]; \
                               v     = *tmp;
 
-void flash_load() {
+u8 flash_load() {
 	int i=0;
 	float *tmp_f;
 	u16 *tmp_u16;
+	u32 *tmp_u32;
+	u32 key;
+
+	RESTORE(key, u32, tmp_u32);
+	if(key != 0xA55A5AA5) return 0;
 
 	RESTORE(pid[0].P, float, tmp_f);
 	RESTORE(pid[0].I, float, tmp_f);
@@ -49,6 +54,8 @@ void flash_load() {
 
 	RESTORE(alfabeta[0].beta, u16, tmp_u16);
 	RESTORE(alfabeta[1].beta, u16, tmp_u16);
+
+	return 1;
 }
 
 #define SAVE(v) value = (u32*)&v; \
@@ -58,11 +65,15 @@ void flash_load() {
 void flash_save() {
 	int i=0;
 	u32 *value;
+	u32 key;
 
 	printf("Salvando..\r\n");
 
 	flash_unlock();
 	flash_erase_page((u32)&fla[0]);
+
+	key = 0xA55A5AA5;
+	SAVE(key);
 
 	SAVE(pid[0].P);
 	SAVE(pid[0].I);
