@@ -1,0 +1,5 @@
+target extended-remote localhost:2000
+#target remote localhost:2000
+mon jtag_scan
+attach 1
+run
