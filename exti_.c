@@ -76,8 +76,12 @@ void exti_setup() {
 //	exti_reset_request(EXTI6 | EXTI7 | EXTI8 | EXTI9 | EXTI12 | EXTI13 | EXTI14 | EXTI15);
 }
 
+#define TEST_PIN_ON gpio_set (GPIOC, GPIO13);
+#define TEST_PIN_OFF gpio_clear (GPIOC, GPIO13);
+
 void exti9_5_isr(void) {
 	u16 EXTI_PR_ = EXTI_PR;
+TEST_PIN_ON;
 	exti_reset_request(EXTI_PR_ & (EXTI6|GPIO7|GPIO8|GPIO9));
 	do {
 		u16 time = READ_TIMER_1;
@@ -98,10 +102,12 @@ void exti9_5_isr(void) {
 		EXTI_PR_ = EXTI_PR;
 		exti_reset_request(EXTI_PR_ & (EXTI6|GPIO7|GPIO8|GPIO9));
 	} while(EXTI_PR_ & (GPIO6|GPIO7|GPIO8|GPIO9));
+TEST_PIN_OFF;
 }
 
 void exti15_10_isr(void) {
 	u16 EXTI_PR_ = EXTI_PR;
+TEST_PIN_ON;
 	exti_reset_request(EXTI_PR_ & (EXTI12|GPIO13|GPIO14|GPIO15));
 	do {
 		u16 time = READ_TIMER_1;
@@ -120,5 +126,6 @@ void exti15_10_isr(void) {
 		EXTI_PR_ = EXTI_PR;
 		exti_reset_request(EXTI_PR_ & (EXTI12|GPIO13|GPIO14|GPIO15));
 	} while (EXTI_PR_&(GPIO12|GPIO13|GPIO14|GPIO15));
+TEST_PIN_OFF;
 }
 

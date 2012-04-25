@@ -1,4 +1,5 @@
 #include <libopencm3/stm32/nvic.h>
+#include <libopencm3/stm32/f1/scb.h>
 #include "nvic_.h"
 
 void nvic_setup()
@@ -25,11 +26,16 @@ void nvic_setup()
 	nvic_enable_irq(NVIC_USART1_IRQ);
 	nvic_set_priority(NVIC_USART1_IRQ, 5);
 
-//	nvic_enable_irq(NVIC_TIM2_IRQ);
-//	nvic_set_priority(NVIC_TIM2_IRQ, 4);
-
+#if 0
 	nvic_enable_irq(NVIC_SYSTICK_IRQ);
 	nvic_set_priority(NVIC_SYSTICK_IRQ, 6);
+#else
+	SCB_SHPR(11) &= ~((6 << 4) & 0xff);
+	SCB_SHPR(11) |= ((6 << 4) & 0xff);
+#endif
+
+//	nvic_enable_irq(NVIC_TIM2_IRQ);
+//	nvic_set_priority(NVIC_TIM2_IRQ, 4);
 
 }
 

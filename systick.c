@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <libopencm3/stm32/systick.h>
+#include <libopencm3/stm32/f1/gpio.h>
 #include "systick.h"
 #include "alfabeta.h"
 #include "ADXL345.h"
@@ -29,9 +30,12 @@ void systick_setup(void)
         /* Start counting. */
         systick_counter_enable();
 }
+#define TEST_PIN2_ON gpio_set (GPIOC, GPIO1);
+#define TEST_PIN2_OFF gpio_clear (GPIOC, GPIO1);
 
 void sys_tick_handler(void)
 {
+TEST_PIN2_ON;
 	static u16 count=0;
 	s32 altura=0, giro_x=0, giro_y=0, giro_z=0;
 	s32 motor[4];
@@ -49,6 +53,7 @@ void sys_tick_handler(void)
 		} else {
 			ITG3200_check_calibration();
 		}
+TEST_PIN2_OFF;
 		return;
 	}
 	angle_gyro[0] += gyroscope[0]*1.15/14.375;
@@ -86,7 +91,7 @@ void sys_tick_handler(void)
 	motor[2] = ( altura + giro_z + giro_x );
 	motor[3] = ( altura - giro_z - giro_y );
 
-	if(joystick[4] > 200 && altura > 30) { // Emergency switch
+	if(joystick[4] > 0 && altura > 30) { // Emergency switch
 		motors_set1(motor[0]);
 		motors_set2(motor[1]);
 		motors_set3(motor[2]);
@@ -98,5 +103,6 @@ void sys_tick_handler(void)
 		motors_set4(0);
 	}
 
+TEST_PIN2_OFF;
 }
 
