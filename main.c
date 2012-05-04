@@ -106,13 +106,16 @@ int main(void)
 			temp32++;
 
 
-			if ((temp32%(200/2)) == 0) { // 30 ms
+			if ((temp32%(20/2)) == 0) { // 30 ms
 //				printf("%d\n", (int)(100.0*180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI)); //X
 //				printf("%d\n", (int)gyroscope[0]); //X
-//				printf("%d %d 0 %d %d\n", (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle_gyro[0]*100), (int)(angle_gyro[1]*100));
+//				printf("%d %d %d %d 0\n", (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle_gyro[0]*100), (int)(angle_gyro[1]*100));
 //				printf("%d %d %d 0 %d\r\n", joystick[0], joystick[1], joystick[3], joystick[2]);
+
+#if 0
 				printf("%5d %5d %5d %5d %5d %5d %5d %5d\r\n", joystick[0], joystick[1], joystick[2], joystick[3], joystick[4], joystick[5], joystick[6], joystick[7]);
-//				printf("%d %d %d %d %d %d %d %d\r\n", joystick_update_count[0], joystick_update_count[1], joystick_update_count[2], joystick_update_count[3], joystick_update_count[4], joystick_update_count[5], joystick_update_count[6], joystick_update_count[7]);
+				printf("%d %d %d %d %d %d %d %d\r\n", joystick_update_count[0], joystick_update_count[1], joystick_update_count[2], joystick_update_count[3], joystick_update_count[4], joystick_update_count[5], joystick_update_count[6], joystick_update_count[7]);
+#endif
 				temp32 = 0;
 			}
 

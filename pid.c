@@ -21,9 +21,9 @@ float pid_update(struct_pid *p, float ref, float med) {
 	p->I_sum_min = -100;
 	p->I_sum_max = 100;
 
-	if((p->I*p->I_sum) < p->I_sum_min) {
+	if((p->I != 0) && (p->I*p->I_sum) < p->I_sum_min) {
 		p->I_sum = p->I_sum_min/p->I;
-	} else if((p->I*p->I_sum) > p->I_sum_max) {
+	} else if((p->I != 0) && (p->I*p->I_sum) > p->I_sum_max) {
 		p->I_sum = p->I_sum_max/p->I;
 	}
 

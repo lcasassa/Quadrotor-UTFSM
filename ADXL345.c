@@ -67,3 +67,7 @@ void ADXL345_getValues() {
         if(return_value == 1) acelerometer[2] = value;
 }
 
+float ADXL345_calibration() {
+	
+}
+

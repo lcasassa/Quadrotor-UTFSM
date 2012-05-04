@@ -7,7 +7,7 @@ void motors_setup();
 inline u16 motors_max_min(s32 value);
 
 #define MOTORS_MAX 3990
-#define MOTORS_MIN 1000
+#define MOTORS_MIN 2000
 
 #define motors_set1(v) PWM1 = motors_max_min(v);
 #define motors_set2(v) PWM2 = motors_max_min(v);

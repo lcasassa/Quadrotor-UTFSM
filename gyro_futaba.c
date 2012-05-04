@@ -14,7 +14,7 @@ s16 gyro_futaba(u16 value) { // -1000 to 1000
 	s16 gyro;
 	PWM5 = value + 3000; // 2000 to 4000
 	gyro = gyro_futaba_input;
-	gyro /= 4; // Less range gain for futaba gyro
+	gyro /= 2; // Less range gain for futaba gyro
 	return gyro;
 
 }

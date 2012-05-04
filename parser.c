@@ -101,7 +101,7 @@ void parser_check() {
 				case 'O':
 				//sscanf(buffer+3,"%d", &value);
 				value = strtoul(buffer+3, NULL, 10);
-				alfabeta[0].beta = ((float)value)/1000.0;
+				alfabeta[0].P = ((float)value)/1000.0;
 				break;
 			}
 			break;
@@ -130,7 +130,7 @@ void parser_check() {
 				case 'O':
 				//sscanf(buffer+3,"%d", &value);
 				value = strtoul(buffer+3, NULL, 10);
-				alfabeta[1].beta = ((float)value)/1000.0;
+				alfabeta[1].P = ((float)value)/1000.0;
 				break;
 			}
 			break;

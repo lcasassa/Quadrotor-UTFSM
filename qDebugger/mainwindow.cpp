@@ -79,6 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->widget_plot_X_PID->addVariable(Qt::blue);
     ui->widget_plot_X_PID->addVariable(Qt::red);
     ui->widget_plot_X_PID->addVariable(Qt::green);
+
     ui->widget_plot_Y_PID->addVariable(Qt::blue);
     ui->widget_plot_Y_PID->addVariable(Qt::red);
     ui->widget_plot_Y_PID->addVariable(Qt::green);
@@ -234,7 +235,7 @@ void MainWindow::nuevosDatos(QList<int> datos) {
         data.append(0);
         ui->widget_plot_X_PID->newData(data);
         QList<double> data2;
-        data2.append(((float)datos[2]));
+        data2.append(((float)datos[2])/100);
         data2.append(((float)datos[3])/100);
         data2.append(((float)datos[4])/100);
         ui->widget_plot_Y_PID->newData(data2);

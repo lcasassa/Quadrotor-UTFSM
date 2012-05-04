@@ -17,8 +17,8 @@ void ITG3200_check_calibration();
 //                     1 * 1.15/14.375 degrees in                    500 ms
 //                                0.08 degrees in                    500 ms
 
-#define CALIBRATION_THRESHOLD 15
-#define CALIBRATION_CHECK_TIME 500
+#define CALIBRATION_THRESHOLD 100
+#define CALIBRATION_CHECK_TIME 1500
 
 
 /* ************************ Register map for the ITG3200 ****************************/

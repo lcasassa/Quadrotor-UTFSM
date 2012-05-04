@@ -20,7 +20,13 @@ u8 flash_load() {
 	u32 key;
 
 	RESTORE(key, u32, tmp_u32);
-	if(key != 0xA55A5AA5) return 0;
+	if(key != 0xA55A5AA5) {
+		pid[0].P = 2;
+		pid[1].P = 2;
+		pid[2].P = 3;
+		pid[3].P = 3;
+		return 0;
+	}
 
 	RESTORE(pid[0].P, float, tmp_f);
 	RESTORE(pid[0].I, float, tmp_f);
@@ -52,8 +58,8 @@ u8 flash_load() {
 	RESTORE(estabilizador[1].offset, u16, tmp_u16);
 	RESTORE(estabilizador[1].ganancia, float, tmp_f);
 
-	RESTORE(alfabeta[0].beta, u16, tmp_u16);
-	RESTORE(alfabeta[1].beta, u16, tmp_u16);
+	RESTORE(alfabeta[0].P, u16, tmp_u16);
+	RESTORE(alfabeta[1].P, u16, tmp_u16);
 
 	return 1;
 }
@@ -105,8 +111,8 @@ void flash_save() {
 	SAVE(estabilizador[1].offset);
 	SAVE(estabilizador[1].ganancia);
 
-	SAVE(alfabeta[0].beta);
-	SAVE(alfabeta[1].beta);
+	SAVE(alfabeta[0].P);
+	SAVE(alfabeta[1].P);
 
 	flash_lock();
 
