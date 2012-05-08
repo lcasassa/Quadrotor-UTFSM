@@ -5,14 +5,14 @@ struct AlfaBeta alfabeta[2];
 
 void alfabeta_setup() {
 
-	alfabeta[0].P = 0.2;
+	alfabeta[0].P = 0.6;
 	alfabeta[0].I = 0.0005;
 	alfabeta[0].I_sum = 0;
 	alfabeta[0].I_max = 10;
 	alfabeta[0].I_min = -10;
 	alfabeta[0].dt = 0.002;
 
-	alfabeta[1].P = 0.2;
+	alfabeta[1].P = 0.6;
 	alfabeta[1].I = 0.0005;
 	alfabeta[1].I_sum = 0;
 	alfabeta[1].I_max = 10;

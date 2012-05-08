@@ -7,6 +7,7 @@
 
 float gyroscope[3] = {0,0,0};
 float gyroscope_offset[3] = {0, 0, 0};
+float gyroscope_gain[3] = {1, 1, 1};
 s8 volatile gyroscope_is_calibrated = 0;
 s8 volatile gyroscope_is_calibration_checked = 0;
 
@@ -65,8 +66,10 @@ void ITG3200_getValues() {
 #endif
         if(return_value == 1) {
 		gyroscope_tmp = (float)(s16)(((s16)value[0]<<8) | value[1]);
-		if(gyroscope_is_calibrated)
+		if(gyroscope_is_calibrated) {
 			gyroscope_tmp -= gyroscope_offset[0];
+			gyroscope_tmp *= gyroscope_gain[0];
+		}
 		gyroscope[0] = gyroscope_tmp;
 	}
 
@@ -78,8 +81,10 @@ void ITG3200_getValues() {
 #endif
         if(return_value == 1) {
 		gyroscope_tmp = (float)(s16)(((s16)value[0]<<8) | value[1]);
-		if(gyroscope_is_calibrated)
+		if(gyroscope_is_calibrated) {
 			gyroscope_tmp -= gyroscope_offset[1];
+			gyroscope_tmp *= gyroscope_gain[1];
+		}
 		gyroscope[1] = gyroscope_tmp;
 	}
 
@@ -91,8 +96,10 @@ void ITG3200_getValues() {
 #endif
         if(return_value == 1) {
 		gyroscope_tmp = (float)(s16)(((s16)value[0]<<8) | value[1]);
-		if(gyroscope_is_calibrated)
+		if(gyroscope_is_calibrated) {
 			gyroscope_tmp -= gyroscope_offset[2];
+			gyroscope_tmp *= gyroscope_gain[2];
+		}
 		gyroscope[2] = gyroscope_tmp;
 	}
 }

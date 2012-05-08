@@ -63,7 +63,7 @@ void Serial::readyRead() {
 
             b = b.remove(0, list[i].size()+1);
 
-            if(list[i].at(0) == '$') { // Packete es de comando
+            if(list[i].at(0) == START_COMMAND_CHAR) { // Packete es de comando
                 emit serialTextReceive(list[i]+END_CHAR);
                 continue;
             }

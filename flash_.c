@@ -1,6 +1,7 @@
 #include <libopencm3/stm32/f1/flash.h>
 #include "flash_.h"
 #include "pid.h"
+#include "ITG3200.h"
 #include "estabilizador.h"
 #include "alfabeta.h"
 #include <stdio.h>
@@ -59,8 +60,13 @@ u8 flash_load() {
 	RESTORE(estabilizador[1].ganancia, float, tmp_f);
 
 	RESTORE(alfabeta[0].P, u16, tmp_u16);
+	RESTORE(alfabeta[0].I, u16, tmp_u16);
 	RESTORE(alfabeta[1].P, u16, tmp_u16);
+	RESTORE(alfabeta[1].I, u16, tmp_u16);
 
+	RESTORE(gyroscope_gain[0], float, tmp_f);
+	RESTORE(gyroscope_gain[1], float, tmp_f);
+	RESTORE(gyroscope_gain[2], float, tmp_f);
 	return 1;
 }
 
@@ -112,7 +118,13 @@ void flash_save() {
 	SAVE(estabilizador[1].ganancia);
 
 	SAVE(alfabeta[0].P);
+	SAVE(alfabeta[0].I);
 	SAVE(alfabeta[1].P);
+	SAVE(alfabeta[1].I);
+
+	SAVE(gyroscope_gain[0]);
+	SAVE(gyroscope_gain[1]);
+	SAVE(gyroscope_gain[2]);
 
 	flash_lock();
 

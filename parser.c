@@ -3,12 +3,14 @@
 #include <limits.h>
 
 #include "parser.h"
+#include "main.h"
 #include "ringbuffer.h"
 #include "usart.h"
 #include "flash_.h"
 #include "pid.h"
 #include "estabilizador.h"
 #include "alfabeta.h"
+#include "ITG3200.h"
 
 u8 parser_flag = 0;
 
@@ -34,21 +36,21 @@ void parser_check() {
 
 		if(size < 7) { printf("size<7\r\n"); return; } // $XP0*FD\r\n
 		if(buffer[0] != '$') { printf("buffer[0] != '$'\r\n"); return; }
-		if(buffer[size-5] != '*') { printf("buffer[size-5]=%c != '*'\r\n", buffer[size-5]); return; }
+		if(buffer[size-4] != '*') { printf("buffer[size-4]=%c != '*'\r\n", buffer[size-4]); return; }
 
-//		sscanf(buffer+size-2-2, "%X", &checksum); // 2 de checksum + "\r\n" = 4 caracteres
-		checksum = strtoul(buffer+size-2-2, NULL, 16);
+//		sscanf(buffer+size-2-2, "%X", &checksum); // 2 de checksum + "\n" = 3 caracteres
+		checksum = strtoul(buffer+size-2-1, NULL, 16);
 
 
 		
 //printf("checksum = %X s:%s\r\n", checksum, buffer+size-2-2);
-		if(checksum != parser_calculateChecksum(buffer+1, size-2-2-1-1)) { // 2 caracteres de "\r\n" + 2 caracteres por el checksum + 1 caracter por el asterisco + 1 porque el 0 cuenta.
+		if(checksum != parser_calculateChecksum(buffer+1, size-1-2-1-1)) { // 2 caracteres de "\n" + 2 caracteres por el checksum + 1 caracter por el asterisco + 1 porque el 0 cuenta.
 			printf("Checksum ! %X != %X\r\n", (int)parser_calculateChecksum(buffer+1, size-2-2-1-1), checksum);
 			return;
 		}
 //printf("procesando Trama\r\n");
 
-		printf("%s", buffer);
+		printf("#%s", &buffer[1]);
 
 		switch(buffer[1]) {
 			case 'E':
@@ -99,9 +101,16 @@ void parser_check() {
 				pid[0].I = ((float)value)/1000.0;
 				break;
 				case 'O':
-				//sscanf(buffer+3,"%d", &value);
 				value = strtoul(buffer+3, NULL, 10);
 				alfabeta[0].P = ((float)value)/1000.0;
+				break;
+				case 'L':
+				value = strtoul(buffer+3, NULL, 10);
+				alfabeta[0].I = ((float)value)/1000.0;
+				break;
+				case 'E':
+				value = strtoul(buffer+3, NULL, 10);
+				gyroscope_gain[0] = ((float)value)/1000.0;
 				break;
 			}
 			break;
@@ -128,9 +137,16 @@ void parser_check() {
 				pid[1].I = ((float)value)/1000.0;
 				break;
 				case 'O':
-				//sscanf(buffer+3,"%d", &value);
 				value = strtoul(buffer+3, NULL, 10);
 				alfabeta[1].P = ((float)value)/1000.0;
+				break;
+				case 'L':
+				value = strtoul(buffer+3, NULL, 10);
+				alfabeta[1].I = ((float)value)/1000.0;
+				break;
+				case 'E':
+				value = strtoul(buffer+3, NULL, 10);
+				gyroscope_gain[1] = ((float)value)/1000.0;
 				break;
 			}
 			break;
@@ -153,6 +169,10 @@ void parser_check() {
 				value = strtoul(buffer+3, NULL, 10);
 //				pid[0].I = ((float)value)/1000.0;
 				break;
+				case 'E':
+				value = strtoul(buffer+3, NULL, 10);
+				gyroscope_gain[2] = ((float)value)/1000.0;
+				break;
 			}
 			break;
 			case 'W':
@@ -167,6 +187,13 @@ void parser_check() {
 				printf("$YI%d*%02d\n", (int)(pid[3].I * 1000), 10);
 				printf("$YG%d*%02d\n", (int)(pid[1].P * 1000), 10);
 				printf("$YA%d*%02d\n", (int)(pid[1].I * 1000), 10);
+				printf("$XE%d*%02d\n", (int)(gyroscope_gain[0] * 1000), 10);
+				printf("$YE%d*%02d\n", (int)(gyroscope_gain[1] * 1000), 10);
+				printf("$ZE%d*%02d\n", (int)(gyroscope_gain[2] * 1000), 10);
+				break;
+			case 'O':
+				value = strtoul(buffer+2, NULL, 10);
+				output = (int)value;
 				break;
 		}
 

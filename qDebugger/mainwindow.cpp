@@ -107,7 +107,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QMessageBox msgBox;
         msgBox.setText("No se pudo abrir la puerta serial");
         msgBox.exec();
-        exit(-1);
+//        exit(-1);
     }
 
 //    serial->send("Ja!!");

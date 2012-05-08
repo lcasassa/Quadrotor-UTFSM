@@ -37,6 +37,8 @@
 #define LED_OFF()    gpio_clear (GPIOC, GPIO12)
 #define LED_TOGGLE() gpio_toggle(GPIOC, GPIO12)
 
+int output = 0;
+
 int main(void)
 {
 	long long int i;
@@ -103,10 +105,23 @@ int main(void)
 		if(systick_flag) {
 			systick_flag = 0;
 
-			temp32++;
+			temp32++; // 2ms
 
 
 			if ((temp32%(20/2)) == 0) { // 30 ms
+				switch(output) {
+				case 0:
+					break;
+				case 1:
+					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100));
+					break;
+				case 2:
+					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100));
+					break;
+				case 3:
+					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100));
+					break;
+				}
 //				printf("%d\n", (int)(100.0*180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI)); //X
 //				printf("%d\n", (int)gyroscope[0]); //X
 //				printf("%d %d %d %d 0\n", (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle_gyro[0]*100), (int)(angle_gyro[1]*100));

@@ -5,6 +5,7 @@
 
 extern float gyroscope[3];
 extern float gyroscope_offset[3];
+extern float gyroscope_gain[3];
 extern volatile s8 gyroscope_is_calibrated;
 extern volatile s8 gyroscope_is_calibration_checked;
 

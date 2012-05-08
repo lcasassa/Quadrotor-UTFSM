@@ -1,9 +1,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+extern int output;
+
 void clock_setup();
 void gpio_setup();
-void systick_setup();
+//void systick_setup();
 
-extern float angle[2];
 #endif

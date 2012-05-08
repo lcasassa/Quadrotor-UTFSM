@@ -14,8 +14,8 @@
 
 u32 systick_counter = 0;
 volatile u8 systick_flag = 0;
-float angle[2] = {0.0,0.0};
-float angle_gyro[2] = {0.0,0.0};
+float angle[3] = {0.0,0.0,0.0};
+float angle_gyro[3] = {0.0,0.0,0.0};
 
 void systick_setup(void)
 {
@@ -37,7 +37,7 @@ void sys_tick_handler(void)
 	static u16 count=0;
 	static float omega_ref[2] = {0.0, 0.0};
 	static float dt_angle_z = 0.0;
-	float gyro[2];
+	float gyro[3];
 	float angle_tmp[2];
 	s32 altura=0, giro_x=0, giro_y=0, giro_z=0;
 	s32 motor[4];
@@ -58,22 +58,24 @@ void sys_tick_handler(void)
 		return;
 	}
 
-	gyro[0] = gyroscope[0]*1.15/14.375;
-	gyro[1] = gyroscope[1]*1.15/14.375;
+	gyro[0] = gyroscope[0]/14.375;
+	gyro[1] = gyroscope[1]/14.375;
+	gyro[2] = gyroscope[2]/14.375;
 
 #if 1
 	
-	dt_angle_z = gyroscope[2]*1.15/14.375*DT*M_PI/180.0;
+	dt_angle_z = gyroscope[2]/14.375*DT*M_PI/180.0;
 
-		angle_tmp[0] = alfabeta[0].angle;
-		angle_tmp[1] = alfabeta[1].angle;
-		alfabeta[0].angle = angle_tmp[0]*cos(dt_angle_z) - angle_tmp[1]*sin(dt_angle_z);
-		alfabeta[1].angle = angle_tmp[1]*cos(dt_angle_z) + angle_tmp[0]*sin(dt_angle_z);
+	angle_tmp[0] = alfabeta[0].angle;
+	angle_tmp[1] = alfabeta[1].angle;
+	alfabeta[0].angle = angle_tmp[0]*cos(dt_angle_z) - angle_tmp[1]*sin(dt_angle_z);
+	alfabeta[1].angle = angle_tmp[1]*cos(dt_angle_z) + angle_tmp[0]*sin(dt_angle_z);
 	
 #endif
 
 	angle[0] = alfabeta_loop(&alfabeta[0],  180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI, &gyro[1]);
 	angle[1] = alfabeta_loop(&alfabeta[1], -180.0*atan2((double)-acelerometer[1],(double)acelerometer[2])/M_PI, &gyro[0]);
+	angle[2] += gyro[2]*DT;
 
 	angle_gyro[0] += gyro[1]*DT;
 	angle_gyro[1] += gyro[0]*DT;
