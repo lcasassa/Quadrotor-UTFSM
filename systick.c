@@ -73,8 +73,8 @@ void sys_tick_handler(void)
 	
 #endif
 
-	angle[0] = alfabeta_loop(&alfabeta[0],  180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI, &gyro[1]);
-	angle[1] = alfabeta_loop(&alfabeta[1], -180.0*atan2((double)-acelerometer[1],(double)acelerometer[2])/M_PI, &gyro[0]);
+	angle[0] = alfabeta_loop(&alfabeta[0],  180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI, &gyro[0]);
+	angle[1] = alfabeta_loop(&alfabeta[1], -180.0*atan2((double)-acelerometer[1],(double)acelerometer[2])/M_PI, &gyro[1]);
 	angle[2] += gyro[2]*DT;
 
 	angle_gyro[0] += gyro[1]*DT;
@@ -85,8 +85,8 @@ void sys_tick_handler(void)
 		estabilizador_loop(0,0);
 	}
 	if ((count%(50/2)) == 0) { // 50 ms
-		omega_ref[0] = pid_update(&pid[2], ((float)joystick[0])/10, angle[1]);
-		omega_ref[1] = pid_update(&pid[3], ((float)joystick[1])/10, angle[0]);
+		omega_ref[0] = pid_update(&pid[2], (   (float)joystick[0])/10, angle[0]);
+		omega_ref[1] = pid_update(&pid[3], (-1*(float)joystick[1])/10, angle[1]);
 		omega_ref[0] *= -1;
 		omega_ref[1] *= -1;
 		count = 0;
@@ -96,11 +96,11 @@ void sys_tick_handler(void)
 
 	altura = joystick[2];
 	if(pid[2].P == 0.0 && pid[3].P == 0.0 ) {
-		giro_x = (int)(pid_update(&pid[0], (float)joystick[0], gyro[0]));
-		giro_y = (int)(pid_update(&pid[1], (float)joystick[1], gyro[1]));
+		giro_x = (int)(pid_update(&pid[0],    (float)joystick[0], gyro[1]));
+		giro_y = (int)(pid_update(&pid[1], -1*(float)joystick[1], gyro[0]));
 	} else {
-		giro_x = (int)(pid_update(&pid[0], omega_ref[0], gyro[0]));
-		giro_y = (int)(pid_update(&pid[1], omega_ref[1], gyro[1]));
+		giro_x = (int)(pid_update(&pid[0], omega_ref[1], gyro[1]));
+		giro_y = (int)(pid_update(&pid[1], omega_ref[0], gyro[0]));
 	}
 
 	motor[0] = ( altura - giro_z + giro_y );

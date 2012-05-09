@@ -34,7 +34,7 @@ void parser_check() {
 		buffer[size] = 0;
 //printf("Hay Trama! size:%d buffer:%s \r\n", (int)size, buffer);
 
-		if(size < 7) { printf("size<7\r\n"); return; } // $XP0*FD\r\n
+		if(size < 6) { printf("size<6\r\n"); return; } // $XP0*FD\r\n
 		if(buffer[0] != '$') { printf("buffer[0] != '$'\r\n"); return; }
 		if(buffer[size-4] != '*') { printf("buffer[size-4]=%c != '*'\r\n", buffer[size-4]); return; }
 
@@ -190,6 +190,10 @@ void parser_check() {
 				printf("$XE%d*%02d\n", (int)(gyroscope_gain[0] * 1000), 10);
 				printf("$YE%d*%02d\n", (int)(gyroscope_gain[1] * 1000), 10);
 				printf("$ZE%d*%02d\n", (int)(gyroscope_gain[2] * 1000), 10);
+				printf("$XO%d*%02d\n", (int)(alfabeta[0].P * 1000), 10);
+				printf("$XL%d*%02d\n", (int)(alfabeta[0].I * 1000), 10);
+				printf("$YO%d*%02d\n", (int)(alfabeta[1].P * 1000), 10);
+				printf("$YL%d*%02d\n", (int)(alfabeta[1].I * 1000), 10);
 				break;
 			case 'O':
 				value = strtoul(buffer+2, NULL, 10);

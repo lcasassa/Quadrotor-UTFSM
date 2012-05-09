@@ -67,10 +67,10 @@ void ITG3200_getValues() {
         if(return_value == 1) {
 		gyroscope_tmp = (float)(s16)(((s16)value[0]<<8) | value[1]);
 		if(gyroscope_is_calibrated) {
-			gyroscope_tmp -= gyroscope_offset[0];
-			gyroscope_tmp *= gyroscope_gain[0];
+			gyroscope_tmp -= gyroscope_offset[1];
+			gyroscope_tmp *= gyroscope_gain[1];
 		}
-		gyroscope[0] = gyroscope_tmp;
+		gyroscope[1] = gyroscope_tmp;
 	}
 
 	return_value = i2c_read(ITG_ADDR, GYRO_YOUT_H, value, 2);
@@ -82,10 +82,10 @@ void ITG3200_getValues() {
         if(return_value == 1) {
 		gyroscope_tmp = (float)(s16)(((s16)value[0]<<8) | value[1]);
 		if(gyroscope_is_calibrated) {
-			gyroscope_tmp -= gyroscope_offset[1];
-			gyroscope_tmp *= gyroscope_gain[1];
+			gyroscope_tmp -= gyroscope_offset[0];
+			gyroscope_tmp *= gyroscope_gain[0];
 		}
-		gyroscope[1] = gyroscope_tmp;
+		gyroscope[0] = gyroscope_tmp;
 	}
 
 	return_value = i2c_read(ITG_ADDR, GYRO_ZOUT_H, value, 2);

@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="imu">
       <attribute name="title">
@@ -66,6 +66,9 @@
              </item>
              <item row="0" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinBox_Gyro_X">
+               <property name="decimals">
+                <number>3</number>
+               </property>
                <property name="minimum">
                 <double>0.500000000000000</double>
                </property>
@@ -89,6 +92,9 @@
              </item>
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinBox_Gyro_Y">
+               <property name="decimals">
+                <number>3</number>
+               </property>
                <property name="minimum">
                 <double>0.500000000000000</double>
                </property>
@@ -112,6 +118,9 @@
              </item>
              <item row="2" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinBox_Gyro_Z">
+               <property name="decimals">
+                <number>3</number>
+               </property>
                <property name="minimum">
                 <double>0.500000000000000</double>
                </property>
@@ -143,7 +152,17 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_filter_X_P"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_filter_X_P">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+              </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_5">
@@ -153,7 +172,17 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_filter_X_I"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_filter_X_I">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -175,7 +204,17 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_filter_Y_P"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_filter_Y_P">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+              </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_11">
@@ -185,7 +224,17 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_filter_Y_I"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_filter_Y_I">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>5.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.050000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -285,7 +334,17 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_X_P"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_X_P">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_8">
@@ -295,7 +354,17 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_X_I"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_X_I">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -317,7 +386,17 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_Y_P"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_Y_P">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_9">
@@ -327,7 +406,17 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_Y_I"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_Y_I">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -349,7 +438,17 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_Z_P"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_Z_P">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
              </item>
              <item row="1" column="0">
               <widget class="QLabel" name="label_16">
@@ -359,7 +458,17 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_Z_I"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularVelocityControl_Z_I">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -376,6 +485,36 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_testVelocityFlight">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string>Test Velocity flight</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_AngularVelocityControl_cleanPlots">
+            <property name="text">
+             <string>Clean Plots</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -400,7 +539,7 @@
            </widget>
           </item>
           <item>
-           <widget class="Plot" name="widget_plot_angularVelocityControl_down" native="true">
+           <widget class="Plot" name="widget_plot_angularVelocityControl_mid" native="true">
             <property name="minimumSize">
              <size>
               <width>100</width>
@@ -408,6 +547,9 @@
              </size>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="Plot" name="widget_plot_angularVelocityControl_down" native="true"/>
           </item>
          </layout>
         </widget>
@@ -435,6 +577,13 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>PushButton</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QGroupBox" name="groupBox_7">
             <property name="title">
              <string>X</string>
@@ -451,7 +600,17 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularControl_X_P"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularControl_X_P">
+               <property name="decimals">
+                <number>3</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -473,7 +632,14 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularControl_Y_P"/>
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_angularControl_Y_P">
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.010000000000000</double>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -490,6 +656,13 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_AngularControl_cleanPlots">
+            <property name="text">
+             <string>Clean Plots</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

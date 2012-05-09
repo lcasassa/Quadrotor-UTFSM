@@ -34,8 +34,35 @@ private slots:
 
     void on_doubleSpinBox_Gyro_Z_valueChanged(double arg1);
 
+    void on_doubleSpinBox_filter_X_P_valueChanged(double arg1);
+
+    void on_doubleSpinBox_filter_X_I_valueChanged(double arg1);
+
+    void on_doubleSpinBox_filter_Y_P_valueChanged(double arg1);
+
+    void on_doubleSpinBox_filter_Y_I_valueChanged(double arg1);
+
+    void on_pushButton_AngularVelocityControl_cleanPlots_released();
+
+    void on_pushButton_testVelocityFlight_released();
+
+    void on_doubleSpinBox_angularVelocityControl_X_P_valueChanged(double arg1);
+
+    void on_doubleSpinBox_angularVelocityControl_X_I_valueChanged(double arg1);
+
+    void on_doubleSpinBox_angularVelocityControl_Y_P_valueChanged(double arg1);
+
+    void on_doubleSpinBox_angularVelocityControl_Y_I_valueChanged(double arg1);
+
+    void on_doubleSpinBox_angularVelocityControl_Z_P_valueChanged(double arg1);
+
+    void on_doubleSpinBox_angularVelocityControl_Z_I_valueChanged(double arg1);
+
+    void on_pushButton_AngularControl_cleanPlots_released();
+
 public slots:
     void receivedNewData(QList<int>);
+    void receivedNewCommand(QByteArray);
 
 private:
     Ui::configQuadrotor *ui;

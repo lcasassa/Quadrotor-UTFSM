@@ -21,6 +21,7 @@ Serial::Serial(QString serial_port) : QextSerialPort("", QextSerialPort::EventDr
 }
 
 void Serial::sendBytes(QByteArray s) {
+    qWarning() << s;
     this->write(s);
 }
 

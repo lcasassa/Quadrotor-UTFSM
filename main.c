@@ -113,13 +113,13 @@ int main(void)
 				case 0:
 					break;
 				case 1:
-					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100));
+					printf("%d %d %d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100), (int)(180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI*100), (int)(-180.0*atan2((double)-acelerometer[1],(double)acelerometer[2])/M_PI*100));
 					break;
 				case 2:
-					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100));
+					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(joystick[0]*100), (int)(gyroscope[1]*100), (int)(joystick[1]*100), (int)(gyroscope[2]*100), (int)(joystick[3]*100));
 					break;
 				case 3:
-					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100));
+					printf("%d %d %d %d\r\n", (int)(angle[0]*100), (int)(joystick[0]*10), (int)(angle[1]*100), (int)(joystick[1]*10));
 					break;
 				}
 //				printf("%d\n", (int)(100.0*180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI)); //X

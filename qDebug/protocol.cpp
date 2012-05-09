@@ -80,7 +80,7 @@ void Protocol::receiveFromSerial(QByteArray newb) {
     static QByteArray b;
     bool ok;
     b += newb;
-    if(b.contains(END_CHAR)) {        
+    if(b.contains(END_CHAR)) {
         QList<QByteArray> list = b.split(END_CHAR);
         for(int i=0; i<(list.size()-1); i++) {
             QList<QByteArray> arg = list[i].split(SPLIT_CHAR);
@@ -90,17 +90,21 @@ void Protocol::receiveFromSerial(QByteArray newb) {
 
             if(list[i].at(0) == START_COMMAND_CHAR) { // Packete es de comando
                 QList<QByteArray> l = list[i].mid(1).split(SPLIT_CHECKSUM);
-                QString checksumString = l[1];
-                int checksum = checksumString.toInt(&ok, 16);
 
-                if(checksum == (int)this->checksum(l[0])) {
-                    emit receivedNewCommand(b);
-                }
+//                QString checksumString = l[1];
+//                int checksum = checksumString.toInt(&ok, 10);
+
+//                if(checksum == (int)this->checksum(l[0])) {
+                qWarning() << l[0];
+
+                emit receivedNewCommand(l[0]);
+//                }
 
                 continue;
             }
 
             if(list[i].at(0) == START_COMMAND_ACK_CHAR) { // Packete es de comando
+                qWarning() << list[i];
                 list[i][0] = START_COMMAND_CHAR;
                 receiveCommand(list[i]+END_CHAR);
                 continue;
@@ -119,6 +123,8 @@ void Protocol::receiveFromSerial(QByteArray newb) {
             if(ok) {
                 emit receivedNewData(datos);
             } else {
+                list[i].chop(1);
+                qWarning() << list[i];
                 emit receivedNewString(list[i]);
             }
 

@@ -35,7 +35,14 @@
     </property>
     <addaction name="actionSelect_Serial"/>
    </widget>
+   <widget class="QMenu" name="menuDebug">
+    <property name="title">
+     <string>Debug</string>
+    </property>
+    <addaction name="actionConsole"/>
+   </widget>
    <addaction name="menuSerial"/>
+   <addaction name="menuDebug"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -49,6 +56,11 @@
   <action name="actionSelect_Serial">
    <property name="text">
     <string>Select Serial</string>
+   </property>
+  </action>
+  <action name="actionConsole">
+   <property name="text">
+    <string>Console</string>
    </property>
   </action>
  </widget>
