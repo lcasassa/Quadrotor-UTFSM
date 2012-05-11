@@ -113,7 +113,7 @@ void sys_tick_handler(void)
 //		printf("s%5d %5d %5d\r\n", (int)((float)joystick[1])/30, (int)angle[0], (int)omega_ref[1]);
 //	}
 
-	if(joystick[4] > 0 && altura > 30) { // Emergency switch
+	if(joystick[4] > 500 && altura > 30) { // Emergency switch
 		motors_set1(motor[0]);
 		motors_set2(motor[1]);
 		motors_set3(motor[2]);

@@ -37,7 +37,7 @@
 #define LED_OFF()    gpio_clear (GPIOC, GPIO12)
 #define LED_TOGGLE() gpio_toggle(GPIOC, GPIO12)
 
-int output = 0;
+int output = 4;
 
 int main(void)
 {
@@ -108,7 +108,7 @@ int main(void)
 			temp32++; // 2ms
 
 
-			if ((temp32%(20/2)) == 0) { // 30 ms
+			if ((temp32%(50/2)) == 0) { // 30 ms
 				switch(output) {
 				case 0:
 					break;
@@ -121,6 +121,9 @@ int main(void)
 				case 3:
 					printf("%d %d %d %d\r\n", (int)(angle[0]*100), (int)(joystick[0]*10), (int)(angle[1]*100), (int)(joystick[1]*10));
 					break;
+				case 4:
+//					printf("%d %d %d %d %d %d %d %d\t", (int)joystick_update_count[0], (int)joystick_update_count[1], (int)joystick_update_count[2], (int)joystick_update_count[3], (int)joystick_update_count[4], (int)joystick_update_count[5], (int)joystick_update_count[6], (int)joystick_update_count[7]);
+					printf("%d %d %d %d %d %d %d %d\r\n", (int)joystick[0], (int)joystick[1], (int)joystick[2], (int)joystick[3], (int)joystick[4], (int)joystick[5], (int)joystick[6], (int)joystick[7]);
 				}
 //				printf("%d\n", (int)(100.0*180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI)); //X
 //				printf("%d\n", (int)gyroscope[0]); //X

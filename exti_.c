@@ -35,42 +35,42 @@ void exti_setup() {
 
 	gpio_set_mode(GPIOC, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO6);
 	exti_select_source(EXTI6, GPIOC);
-	exti_set_trigger(EXTI6, EXTI_TRIGGER_RISING);
+	exti_set_trigger(EXTI6, EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI6);
 
 	gpio_set_mode(GPIOC, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO7);
 	exti_select_source(EXTI7, GPIOC);
-	exti_set_trigger(EXTI7, EXTI_TRIGGER_RISING);
+	exti_set_trigger(EXTI7, EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI7);
 
 	gpio_set_mode(GPIOC, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO8);
 	exti_select_source(EXTI8, GPIOC);
-	exti_set_trigger(EXTI8, EXTI_TRIGGER_RISING);
+	exti_set_trigger(EXTI8, EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI8);
 
 	gpio_set_mode(GPIOC, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO9);
 	exti_select_source(EXTI9, GPIOC);
-	exti_set_trigger(EXTI9, EXTI_TRIGGER_RISING); //EXTI_TRIGGER_BOTH);
+	exti_set_trigger(EXTI9, EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI9);
 
 	gpio_set_mode(GPIOB, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO15);
 	exti_select_source(EXTI15, GPIOB);
-	exti_set_trigger(EXTI15, EXTI_TRIGGER_RISING);
+	exti_set_trigger(EXTI15, EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI15);
 
 	gpio_set_mode(GPIOB, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO14);
 	exti_select_source(EXTI14, GPIOB);
-	exti_set_trigger(EXTI14, EXTI_TRIGGER_RISING);
+	exti_set_trigger(EXTI14, EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI14);
 
 	gpio_set_mode(GPIOB, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO13);
 	exti_select_source(EXTI13, GPIOB);
-	exti_set_trigger(EXTI13, EXTI_TRIGGER_RISING);
+	exti_set_trigger(EXTI13, EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI13);
 
 	gpio_set_mode(GPIOB, GPIO_MODE_INPUT, GPIO_CNF_INPUT_FLOAT, GPIO12);
 	exti_select_source(EXTI12, GPIOB);
-	exti_set_trigger(EXTI12, EXTI_TRIGGER_RISING); //EXTI_TRIGGER_BOTH);
+	exti_set_trigger(EXTI12, EXTI_TRIGGER_BOTH);
 	exti_enable_request(EXTI12);
 
 //	exti_reset_request(EXTI6 | EXTI7 | EXTI8 | EXTI9 | EXTI12 | EXTI13 | EXTI14 | EXTI15);
@@ -78,47 +78,42 @@ void exti_setup() {
 
 void exti9_5_isr(void) {
 	u16 EXTI_PR_ = EXTI_PR;
-	exti_reset_request(EXTI_PR_ & (EXTI6|GPIO7|GPIO8|GPIO9));
-	do {
-		u16 time = READ_TIMER_1;
-		if(EXTI_PR_ & GPIO6) {
-			joystick_exti(4, time);
-		}
-		if(EXTI_PR_ & GPIO7) {
-			joystick_exti(5, time);
-		}
+	exti_reset_request(EXTI6|EXTI7|EXTI8|EXTI9);
+	u16 time = READ_TIMER_1;
+	u16 port = gpio_port_read(GPIOC);
 
-		if(EXTI_PR_ & GPIO8) {
-			joystick_exti(6, time);
-		}
-
-		if(EXTI_PR_ & GPIO9) {
-			joystick_exti(7, time);
-		}
-		EXTI_PR_ = EXTI_PR;
-		exti_reset_request(EXTI_PR_ & (EXTI6|GPIO7|GPIO8|GPIO9));
-	} while(EXTI_PR_ & (GPIO6|GPIO7|GPIO8|GPIO9));
+	if(EXTI_PR_ & GPIO6) {
+		joystick_exti(4, time, port&GPIO6 ? 1:0);
+	}
+	if(EXTI_PR_ & GPIO7) {
+		joystick_exti(5, time, port&GPIO7 ? 1:0);
+	}
+	if(EXTI_PR_ & GPIO8) {
+		joystick_exti(6, time, port&GPIO8 ? 1:0);
+	}
+	if(EXTI_PR_ & GPIO9) {
+		joystick_exti(7, time, port&GPIO9 ? 1:0);
+	}
 }
 
 void exti15_10_isr(void) {
 	u16 EXTI_PR_ = EXTI_PR;
 	exti_reset_request(EXTI_PR_ & (EXTI12|GPIO13|GPIO14|GPIO15));
-	do {
-		u16 time = READ_TIMER_1;
-		if(EXTI_PR_&GPIO15) {
-			joystick_exti(3, time);
-		}
-		if(EXTI_PR_&GPIO14) {
-			joystick_exti(2, time);
-		}
-		if(EXTI_PR_&GPIO13) {
-			joystick_exti(0, time);
-		}
-		if(EXTI_PR_&GPIO12) {
-			joystick_exti(1, time);
-		}
-		EXTI_PR_ = EXTI_PR;
-		exti_reset_request(EXTI_PR_ & (EXTI12|GPIO13|GPIO14|GPIO15));
-	} while (EXTI_PR_&(GPIO12|GPIO13|GPIO14|GPIO15));
+	u16 time = READ_TIMER_1;
+	u16 port = gpio_port_read(GPIOB);
+
+	if(EXTI_PR_&GPIO15) {
+		joystick_exti(3, time, port&GPIO15 ? 1:0);
+	}
+	if(EXTI_PR_&GPIO14) {
+		joystick_exti(2, time, port&GPIO14 ? 1:0);
+	}
+	if(EXTI_PR_&GPIO13) {
+		joystick_exti(0, time, port&GPIO13 ? 1:0);
+	}
+	if(EXTI_PR_&GPIO12) {
+		joystick_exti(1, time, port&GPIO12 ? 1:0);
+	}
+	EXTI_PR_ = EXTI_PR;
 }
 

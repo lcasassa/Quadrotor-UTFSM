@@ -69,6 +69,15 @@ void configQuadrotor::receivedNewData(QList<int> data_int) {
         ui->widget_plot_angularControl_up->newData(data.mid(0, 2));
         ui->widget_plot_angularControl_down->newData(data.mid(2, 2));
         break;
+    case 3:
+        ui->progressBar_thro->setValue(data_int.at(2));
+        ui->progressBar_rudo->setValue(data_int.at(3));
+        ui->progressBar_ale->setValue(data_int.at(0));
+        ui->progressBar_elev->setValue(data_int.at(1));
+        ui->progressBar_gear->setValue(data_int.at(4));
+        ui->progressBar_aux1->setValue(data_int.at(5));
+        ui->progressBar_aux2->setValue(data_int.at(6));
+        ui->progressBar_aux3->setValue(data_int.at(7));
     }
 
 }
