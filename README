@@ -5,6 +5,7 @@ Electronic engineering student UTFSM
 
 Based on Olimex STM32-H103 Header Board.
 
+This is what I use:
 1x Header Board for STM32 Cortex-M3 http://www.sparkfun.com/products/8559
 1x IMU Digital Combo Board ITG3200/ADXL345 http://www.sparkfun.com/products/10121
 2x XBee Pro 50mW http://www.sparkfun.com/products/10421
@@ -12,25 +13,35 @@ Based on Olimex STM32-H103 Header Board.
 1x TX 6 channels walkera
 4x ESC with simon's firmware https://github.com/sim-/tgy
 4x Brushless motors AXI 2808/24
-2x APC 10x4.7 Slow Flyer Propeller http://www.amainhobbies.com/
+2x APC 10 x 4.7 Slow Flyer Propeller http://www.amainhobbies.com/
 2x APC 10 x 4.7 Slow Flyer Pusher Propeller http://www.amainhobbies.com/
+1x Futaba gyro - I have not yet made a tail control with the ITG3200.
 
 Do not forget the cables to connect everything.
 
 Thanks to the libopencm3 proyect for ther library!
 
 
+This is the control diagram for each axis angle control:
 
-This is the control diagram for each axis:
+   / \    -----  / \    ------    --------      -------
+---| |----| P |--| |----| PI |----| Quad |------| 1/s |--------
+   \ /    -----  \ /    ------    --------   |  -------   |
+    |             |                          |            |
+    |             -----------Gyro-------------            |
+    |                                                     |
+    ------------------------Angle--------------------------
 
-   / \    -------  / \    -------    --------      -------
----| |----| PID |--| |----| PID |----| Quad |------| 1/s |--------
-   \ /    -------  \ /    -------    --------   |  -------   |
-    |               |                           |            |
-    |               -----------Gyro--------------            |
-    |                                                        |
-    ---------------------------Angle--------------------------
-
-With the gyro, the accelerometer and a kalman filter you can get the Angle.
+With the gyro, the accelerometer and a kalman filter or alfa beta filter you can get the Angle.
 The input is the Angle reference given by the joystick.
+
+INSTALL
+
+Please install libopencm3 on ../libopencm3 or change de Makefile.Include file to point it to another directory.
+http://sourceforge.net/projects/libopencm3/
+
+Just do a:
+make flash
+
+Happy hacking!
 
