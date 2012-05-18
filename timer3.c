@@ -1,9 +1,7 @@
 #include <libopencm3/stm32/f1/rcc.h>
 #include <libopencm3/stm32/f1/gpio.h>
-#include <libopencm3/stm32/timer.h>
 #include "timer3.h"
 #include "gyro_futaba.h"
-#include <stdio.h> 
 
 void timer3_setup(void)
 {

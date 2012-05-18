@@ -11,7 +11,8 @@
 #include "ringbuffer.h"
 #include "main.h"
 #include "usart.h"
-#include "i2c.h"
+#include "i2c1.h"
+#include "i2c2.h"
 #include "ADXL345.h"
 #include "ITG3200.h"
 #include "timer3.h"
@@ -29,6 +30,7 @@
 #include "estabilizador.h"
 #include "gyro_futaba.h"
 #include "systick.h"
+#include "BMP085.h"
 
 #define printf_blocking(...) sprintf(__VA_ARGS__); for(i=0; s[i]!=0; i++) usart_send_blocking(USART1, s[i])
 #define nop_delay() for(i=0; i<10000000; i++) { __asm__("nop");  __asm__("nop");  __asm__("nop"); __asm__("nop"); }
@@ -37,7 +39,7 @@
 #define LED_OFF()    gpio_clear (GPIOC, GPIO12)
 #define LED_TOGGLE() gpio_toggle(GPIOC, GPIO12)
 
-int output = 4;
+int output = 0;
 
 int main(void)
 {
@@ -64,7 +66,7 @@ int main(void)
 
 #ifndef I2C_OFF
 	// Acelerometer and Gyroscope
-	i2c_setup();
+	i2c2_setup();
 	ADXL345_setup();
 	ITG3200_setup();
 #endif
@@ -97,6 +99,9 @@ int main(void)
 	timer2_setup();
 	timer3_setup();
 
+	i2c1_setup();
+	BMP085_setup();
+
 	while(!gyroscope_is_calibration_checked);
 
 	while (1) {
@@ -108,9 +113,12 @@ int main(void)
 			temp32++; // 2ms
 
 
-			if ((temp32%(50/2)) == 0) { // 30 ms
+			if ((temp32%(100/2)) == 0) { // 30 ms
 				switch(output) {
 				case 0:
+BMP085_getValues();
+if(temperature<0 || pressure<0 ||altitude<0) break;
+printf("%d.%dC %dPa %d.%dm\r\n", (int)(temperature/10), (int)temperature%10, (int)(pressure), (int)(altitude), (int)(altitude*1000)%1000);
 					break;
 				case 1:
 					printf("%d %d %d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100), (int)(180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI*100), (int)(-180.0*atan2((double)-acelerometer[1],(double)acelerometer[2])/M_PI*100));

@@ -1,7 +1,7 @@
 #ifndef MOTORS_H
 #define MOTORS_H
 
-#include "timer4.h"
+#include "timer2.h"
 
 void motors_setup();
 inline u16 motors_max_min(s32 value);

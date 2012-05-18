@@ -1,5 +1,5 @@
 #include "estabilizador.h"
-#include "timer2.h"
+#include "timer4.h"
 #include "systick.h"
 #include <math.h>
 #include "main.h"

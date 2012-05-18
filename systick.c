@@ -96,17 +96,17 @@ void sys_tick_handler(void)
 
 	altura = joystick[2];
 	if(pid[2].P == 0.0 && pid[3].P == 0.0 ) {
-		giro_x = (int)(pid_update(&pid[0],    (float)joystick[0], gyro[1]));
-		giro_y = (int)(pid_update(&pid[1], -1*(float)joystick[1], gyro[0]));
+		giro_x = (int)(pid_update(&pid[0],    (float)joystick[1], gyro[0]));
+		giro_y = (int)(pid_update(&pid[1], -1*(float)joystick[0], gyro[1]));
 	} else {
-		giro_x = (int)(pid_update(&pid[0], omega_ref[1], gyro[1]));
-		giro_y = (int)(pid_update(&pid[1], omega_ref[0], gyro[0]));
+		giro_x = (int)(pid_update(&pid[0], omega_ref[0], gyro[0]));
+		giro_y = (int)(pid_update(&pid[1], omega_ref[1], gyro[1]));
 	}
 
-	motor[0] = ( altura - giro_z + giro_y );
-	motor[1] = ( altura + giro_z - giro_x );
-	motor[2] = ( altura + giro_z + giro_x );
-	motor[3] = ( altura - giro_z - giro_y );
+	motor[0] = ( altura + giro_z + giro_y );
+	motor[1] = ( altura - giro_z - giro_x );
+	motor[2] = ( altura + giro_z - giro_y );
+	motor[3] = ( altura - giro_z + giro_x );
 
 //	if (count == 0) { // 50 ms
 //		printf("%d %d %d %d\r\n", (int)motor[0], (int)motor[1], (int)motor[2], (int)motor[3]);

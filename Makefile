@@ -1,6 +1,6 @@
 BINARY = main
 
-OBJS = matrix.o alfabeta.o systick.o gyro_futaba.o estabilizador.o parser.o timer2.o pid.o flash_.o timer3.o nvic_.o timer1.o exti_.o joystick.o motors.o timer4.o usart.o ringbuffer.o ITG3200.o ADXL345.o i2c.o
+OBJS = BMP085.o matrix.o alfabeta.o systick.o gyro_futaba.o estabilizador.o parser.o timer2.o pid.o flash_.o timer3.o nvic_.o timer1.o exti_.o joystick.o motors.o timer4.o usart.o ringbuffer.o ITG3200.o ADXL345.o i2c1.o i2c2.o
 
 LDSCRIPT = stm32-h103.ld
 LDFLAGS += -lm -g
