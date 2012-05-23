@@ -22,8 +22,8 @@ u8 flash_load() {
 
 	RESTORE(key, u32, tmp_u32);
 	if(key != 0xA55A5AA5) {
-		pid[0].P = 2;
-		pid[1].P = 2;
+		pid[0].P = 2.5;
+		pid[1].P = 2.5;
 		pid[2].P = 3;
 		pid[3].P = 3;
 		return 0;

@@ -124,13 +124,13 @@ printf("%d.%dC %dPa %d.%dm\r\n", (int)(temperature/10), (int)temperature%10, (in
 					printf("%d %d %d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100), (int)(180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI*100), (int)(-180.0*atan2((double)-acelerometer[1],(double)acelerometer[2])/M_PI*100));
 					break;
 				case 2:
-					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(joystick[0]*100), (int)(gyroscope[1]*100), (int)(joystick[1]*100), (int)(gyroscope[2]*100), (int)(joystick[3]*100));
+					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100/14.375), (int)(joystick[1]*100), (int)(gyroscope[1]*100/14.375), (int)(-1*joystick[0]*100), (int)(gyroscope[2]*100/14.375), (int)(joystick[3]*100));
 					break;
 				case 3:
 					printf("%d %d %d %d\r\n", (int)(angle[0]*100), (int)(joystick[0]*10), (int)(angle[1]*100), (int)(joystick[1]*10));
 					break;
 				case 4:
-//					printf("%d %d %d %d %d %d %d %d\t", (int)joystick_update_count[0], (int)joystick_update_count[1], (int)joystick_update_count[2], (int)joystick_update_count[3], (int)joystick_update_count[4], (int)joystick_update_count[5], (int)joystick_update_count[6], (int)joystick_update_count[7]);
+//					printf("j%d %d %d %d %d %d %d %d\t", (int)joystick_update_count[0], (int)joystick_update_count[1], (int)joystick_update_count[2], (int)joystick_update_count[3], (int)joystick_update_count[4], (int)joystick_update_count[5], (int)joystick_update_count[6], (int)joystick_update_count[7]);
 					printf("%d %d %d %d %d %d %d %d\r\n", (int)joystick[0], (int)joystick[1], (int)joystick[2], (int)joystick[3], (int)joystick[4], (int)joystick[5], (int)joystick[6], (int)joystick[7]);
 				}
 //				printf("%d\n", (int)(100.0*180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI)); //X

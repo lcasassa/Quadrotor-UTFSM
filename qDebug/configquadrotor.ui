@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="imu">
       <attribute name="title">
@@ -279,7 +279,6 @@
               <height>100</height>
              </size>
             </property>
-            <zorder>tabWidget</zorder>
            </widget>
           </item>
           <item>
@@ -339,7 +338,7 @@
                 <number>3</number>
                </property>
                <property name="maximum">
-                <double>10.000000000000000</double>
+                <double>100.000000000000000</double>
                </property>
                <property name="singleStep">
                 <double>0.010000000000000</double>
@@ -391,7 +390,7 @@
                 <number>3</number>
                </property>
                <property name="maximum">
-                <double>10.000000000000000</double>
+                <double>100.000000000000000</double>
                </property>
                <property name="singleStep">
                 <double>0.010000000000000</double>

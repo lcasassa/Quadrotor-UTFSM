@@ -72,8 +72,8 @@ void configQuadrotor::receivedNewData(QList<int> data_int) {
     case 3:
         ui->progressBar_thro->setValue(data_int.at(2));
         ui->progressBar_rudo->setValue(data_int.at(3));
-        ui->progressBar_ale->setValue(data_int.at(0));
-        ui->progressBar_elev->setValue(data_int.at(1));
+        ui->progressBar_ale->setValue(data_int.at(1));
+        ui->progressBar_elev->setValue(data_int.at(0));
         ui->progressBar_gear->setValue(data_int.at(4));
         ui->progressBar_aux1->setValue(data_int.at(5));
         ui->progressBar_aux2->setValue(data_int.at(6));
