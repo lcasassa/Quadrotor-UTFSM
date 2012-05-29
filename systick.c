@@ -16,6 +16,7 @@ u32 systick_counter = 0;
 volatile u8 systick_flag = 0;
 float angle[3] = {0.0,0.0,0.0};
 float angle_gyro[3] = {0.0,0.0,0.0};
+float omega_ref[2] = {0.0, 0.0};
 
 void systick_setup(void)
 {
@@ -35,7 +36,6 @@ void systick_setup(void)
 void sys_tick_handler(void)
 {
 	static u16 count=0;
-	static float omega_ref[2] = {0.0, 0.0};
 	static float dt_angle_z = 0.0;
 	float gyro[3];
 	float angle_tmp[2];
@@ -103,10 +103,10 @@ void sys_tick_handler(void)
 		giro_y = (int)(pid_update(&pid[1], omega_ref[1], gyro[1]));
 	}
 
-	motor[0] = ( altura + giro_z + giro_y );
-	motor[1] = ( altura - giro_z - giro_x );
-	motor[2] = ( altura + giro_z - giro_y );
-	motor[3] = ( altura - giro_z + giro_x );
+	motor[0] = ( altura + giro_z - giro_x );
+	motor[1] = ( altura - giro_z - giro_y );
+	motor[2] = ( altura + giro_z + giro_x );
+	motor[3] = ( altura - giro_z + giro_y );
 
 //	if (count == 0) { // 50 ms
 //		printf("%d %d %d %d\r\n", (int)motor[0], (int)motor[1], (int)motor[2], (int)motor[3]);

@@ -105,33 +105,51 @@ int main(void)
 	while(!gyroscope_is_calibration_checked);
 
 	while (1) {
-		static u32 temp32 = 0;
+		static u32 count_2ms = 0;
 
 		if(systick_flag) {
 			systick_flag = 0;
 
-			temp32++; // 2ms
+			count_2ms++; // 2ms
+		}
 
 
-			if ((temp32%(100/2)) == 0) { // 30 ms
 				switch(output) {
 				case 0:
-BMP085_getValues();
-if(temperature<0 || pressure<0 ||altitude<0) break;
-printf("%d.%dC %dPa %d.%dm\r\n", (int)(temperature/10), (int)temperature%10, (int)(pressure), (int)(altitude), (int)(altitude*1000)%1000);
+					if ((count_2ms%(30/2)) != 0) break; // 30 ms
+					BMP085_getValues();
+					if(temperature<0 || pressure<0 ||altitude<0) break;
+					printf("%d.%dC %dPa %d.%dm\r\n", (int)(temperature/10), (int)temperature%10, (int)(pressure), (int)(altitude), (int)(altitude*1000)%1000);
 					break;
 				case 1:
+					if ((count_2ms%(30/2)) != 0) break; // 30 ms
 					printf("%d %d %d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100), (int)(180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI*100), (int)(-180.0*atan2((double)-acelerometer[1],(double)acelerometer[2])/M_PI*100));
 					break;
 				case 2:
-					printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100/14.375), (int)(joystick[1]*100), (int)(gyroscope[1]*100/14.375), (int)(-1*joystick[0]*100), (int)(gyroscope[2]*100/14.375), (int)(joystick[3]*100));
+					if ((count_2ms%(30/2)) != 0) break; // 30 ms
+					if(pid[2].P == 0.0 && pid[3].P == 0.0 ) {
+						printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100/14.375), (int)(joystick[1]*100), (int)(gyroscope[1]*100/14.375), (int)(-1*joystick[0]*100), (int)(gyroscope[2]*100/14.375), (int)(joystick[3]*100));
+					} else {
+						printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100/14.375), (int)(omega_ref[0]*100), (int)(gyroscope[1]*100/14.375), (int)(-1*omega_ref[1]*100), (int)(gyroscope[2]*100/14.375), (int)(joystick[3]*100));
+					}
 					break;
 				case 3:
-					printf("%d %d %d %d\r\n", (int)(angle[0]*100), (int)(joystick[0]*10), (int)(angle[1]*100), (int)(joystick[1]*10));
+					if ((count_2ms%(30/2)) != 0) break; // 30 ms
+					printf("%d %d %d %d\r\n", (int)(angle[0]*100), (int)(joystick[0]*10), (int)(angle[1]*100), (int)(-1*joystick[1]*10));
 					break;
 				case 4:
+					if ((count_2ms%(30/2)) != 0) break; // 30 ms
 //					printf("j%d %d %d %d %d %d %d %d\t", (int)joystick_update_count[0], (int)joystick_update_count[1], (int)joystick_update_count[2], (int)joystick_update_count[3], (int)joystick_update_count[4], (int)joystick_update_count[5], (int)joystick_update_count[6], (int)joystick_update_count[7]);
 					printf("%d %d %d %d %d %d %d %d\r\n", (int)joystick[0], (int)joystick[1], (int)joystick[2], (int)joystick[3], (int)joystick[4], (int)joystick[5], (int)joystick[6], (int)joystick[7]);
+					break;
+				case 5:
+					{
+					char s[50];
+					int len;
+					len = sprintf(s,"%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100/14.375), (int)(gyroscope[1]*100/14.375), (int)(gyroscope[2]*100/14.375), (int)acelerometer[0], (int)acelerometer[1], (int)acelerometer[2]);
+					uart_write_block(s, len);
+					}
+					break;
 				}
 //				printf("%d\n", (int)(100.0*180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI)); //X
 //				printf("%d\n", (int)gyroscope[0]); //X
@@ -142,11 +160,8 @@ printf("%d.%dC %dPa %d.%dm\r\n", (int)(temperature/10), (int)temperature%10, (in
 				printf("%5d %5d %5d %5d %5d %5d %5d %5d\r\n", joystick[0], joystick[1], joystick[2], joystick[3], joystick[4], joystick[5], joystick[6], joystick[7]);
 				printf("%d %d %d %d %d %d %d %d\r\n", joystick_update_count[0], joystick_update_count[1], joystick_update_count[2], joystick_update_count[3], joystick_update_count[4], joystick_update_count[5], joystick_update_count[6], joystick_update_count[7]);
 #endif
-				temp32 = 0;
-			}
 
 
-		}
 
 
 		parser_check();

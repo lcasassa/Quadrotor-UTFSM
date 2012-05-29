@@ -96,3 +96,10 @@ int _write(int file, char *ptr, int len)
 	return -1;
 }
 
+void uart_write_block(char*ptr, int len)
+{
+	while(0 < ring_write(&output_ring, (u8 *)ptr, len));
+	USART_CR1(USART1) |= USART_CR1_TXEIE;
+	return;
+}
+

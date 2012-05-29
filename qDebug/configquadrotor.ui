@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="imu">
       <attribute name="title">
@@ -157,7 +157,7 @@
                 <number>3</number>
                </property>
                <property name="maximum">
-                <double>5.000000000000000</double>
+                <double>15.000000000000000</double>
                </property>
                <property name="singleStep">
                 <double>0.050000000000000</double>
@@ -209,7 +209,7 @@
                 <number>3</number>
                </property>
                <property name="maximum">
-                <double>5.000000000000000</double>
+                <double>15.000000000000000</double>
                </property>
                <property name="singleStep">
                 <double>0.050000000000000</double>

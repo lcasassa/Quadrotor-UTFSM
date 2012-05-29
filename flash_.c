@@ -26,6 +26,13 @@ u8 flash_load() {
 		pid[1].P = 2.5;
 		pid[2].P = 3;
 		pid[3].P = 3;
+		gyroscope_gain[0] = 1.05;
+		gyroscope_gain[1] = 1.05;
+		gyroscope_gain[2] = 1.05;
+		alfabeta[0].P = 8;
+		alfabeta[0].I = 0.015;
+		alfabeta[1].P = 8;
+		alfabeta[1].I = 0.015;
 		return 0;
 	}
 

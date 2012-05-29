@@ -7,6 +7,7 @@ extern u32 systick_counter;
 extern volatile u8 systick_flag;
 extern float angle[3];
 extern float angle_gyro[3];
+extern float omega_ref[2];
 
 
 void systick_setup(void);
