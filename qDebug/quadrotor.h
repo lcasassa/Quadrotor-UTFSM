@@ -44,6 +44,10 @@ public slots:
     void setE2_ganancia(quint16 value);
     void saveParameters(void);
     void getParameters(void);
+    void setX_AccOffset(quint16 value);
+    void setY_AccOffset(quint16 value);
+    void setZ_AccOffset(quint16 value);
+    void calculate_AccOffset(void);
 
 public:
     Protocol *protocol;

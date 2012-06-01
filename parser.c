@@ -11,6 +11,7 @@
 #include "estabilizador.h"
 #include "alfabeta.h"
 #include "ITG3200.h"
+#include "ADXL345.h"
 
 u8 parser_flag = 0;
 
@@ -112,6 +113,10 @@ void parser_check() {
 				value = strtoul(buffer+3, NULL, 10);
 				gyroscope_gain[0] = ((float)value)/1000.0;
 				break;
+				case 'F':
+				value = strtoul(buffer+3, NULL, 10);
+				accelerometer_offset[0] = value;
+				break;
 			}
 			break;
 			case 'Y':
@@ -148,6 +153,10 @@ void parser_check() {
 				value = strtoul(buffer+3, NULL, 10);
 				gyroscope_gain[1] = ((float)value)/1000.0;
 				break;
+				case 'F':
+				value = strtoul(buffer+3, NULL, 10);
+				accelerometer_offset[1] = value;
+				break;
 			}
 			break;
 			case 'Z':
@@ -173,6 +182,10 @@ void parser_check() {
 				value = strtoul(buffer+3, NULL, 10);
 				gyroscope_gain[2] = ((float)value)/1000.0;
 				break;
+				case 'F':
+				value = strtoul(buffer+3, NULL, 10);
+				accelerometer_offset[2] = value;
+				break;
 			}
 			break;
 			case 'W':
@@ -194,6 +207,9 @@ void parser_check() {
 				printf("$XL%d*%02d\n", (int)(alfabeta[0].I * 1000), 10);
 				printf("$YO%d*%02d\n", (int)(alfabeta[1].P * 1000), 10);
 				printf("$YL%d*%02d\n", (int)(alfabeta[1].I * 1000), 10);
+				printf("$XF%d*%02d\n", (int)(accelerometer_offset[0]), 10);
+				printf("$YF%d*%02d\n", (int)(accelerometer_offset[1]), 10);
+				printf("$ZF%d*%02d\n", (int)(accelerometer_offset[2]), 10);
 				break;
 			case 'O':
 				value = strtoul(buffer+2, NULL, 10);

@@ -8,6 +8,10 @@ configQuadrotor::configQuadrotor(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->widget_plot_accelerometer_up->addVariable(Qt::red);
+    ui->widget_plot_accelerometer_mid->addVariable(Qt::red);
+    ui->widget_plot_accelerometer_down->addVariable(Qt::red);
+
     ui->widget_plot_angularControl_up->addVariable(Qt::red);
     ui->widget_plot_angularControl_up->addVariable(Qt::blue);
 
@@ -33,6 +37,9 @@ configQuadrotor::configQuadrotor(QWidget *parent) :
     ui->widget_plot_imu_down->addVariable(Qt::yellow);
     ui->widget_plot_imu_down->addVariable(Qt::cyan);
 
+    out = NULL;
+    file = NULL;
+
 }
 
 configQuadrotor::~configQuadrotor()
@@ -56,20 +63,28 @@ void configQuadrotor::receivedNewData(QList<int> data_int) {
     }
 
     switch(ui->tabWidget->currentIndex()) {
-    case 0: // IMU
+    case 0: // Accelerometer
+        for(int i=0; i<data.size(); i++) {
+            data[i] = data[i]*100;
+        }
+        ui->widget_plot_accelerometer_up->newData(data.mid(0,1));
+        ui->widget_plot_accelerometer_mid->newData(data.mid(1,1));
+        ui->widget_plot_accelerometer_down->newData(data.mid(2,1));
+        break;
+    case 1: // IMU
         ui->widget_plot_imu_up->newData(data.mid(0, 3));
         ui->widget_plot_imu_down->newData(data.mid(3, 5));
         break;
-    case 1:
+    case 2:
         ui->widget_plot_angularVelocityControl_up->newData(data.mid(0, 2));
         ui->widget_plot_angularVelocityControl_mid->newData(data.mid(2, 2));
         ui->widget_plot_angularVelocityControl_down->newData(data.mid(4, 2));
         break;
-    case 2:
+    case 3:
         ui->widget_plot_angularControl_up->newData(data.mid(0, 2));
         ui->widget_plot_angularControl_down->newData(data.mid(2, 2));
         break;
-    case 3:
+    case 4:
         ui->progressBar_thro->setValue(data_int.at(2));
         ui->progressBar_rudo->setValue(data_int.at(3));
         ui->progressBar_ale->setValue(data_int.at(1));
@@ -78,6 +93,15 @@ void configQuadrotor::receivedNewData(QList<int> data_int) {
         ui->progressBar_aux1->setValue(data_int.at(5));
         ui->progressBar_aux2->setValue(data_int.at(6));
         ui->progressBar_aux3->setValue(data_int.at(7));
+        break;
+    case 5:
+        if(ui->pushButton_recordIMU->text() == "Stop" && file != NULL && out != NULL) {
+            for(int i=0; i<data_int.size(); i++) {
+                *out << data_int[i];
+                *out << " ";
+            }
+            *out << "\r\n";
+        }
     }
 
 }
@@ -182,6 +206,10 @@ void configQuadrotor::receivedNewCommand(QByteArray b) {
             break;
         case 'E':
             ui->doubleSpinBox_Gyro_X->setValue((float)value/1000);
+            break;
+        case 'F':
+            ui->spinBox_acelerometer_x_offset->setValue(value);
+            break;
         }
         break;
     case 'Y':
@@ -209,6 +237,10 @@ void configQuadrotor::receivedNewCommand(QByteArray b) {
             break;
         case 'E':
             ui->doubleSpinBox_Gyro_Y->setValue((float)value/1000);
+            break;
+        case 'F':
+            ui->spinBox_acelerometer_y_offset->setValue(value);
+            break;
         }
         break;
     case 'Z':
@@ -225,6 +257,10 @@ void configQuadrotor::receivedNewCommand(QByteArray b) {
             break;
         case 'E':
             ui->doubleSpinBox_Gyro_Z->setValue((float)value/1000);
+            break;
+        case 'F':
+            ui->spinBox_acelerometer_z_offset->setValue(value);
+            break;
         }
         break;
     }
@@ -275,4 +311,59 @@ void configQuadrotor::on_doubleSpinBox_angularVelocityControl_Z_P_valueChanged(d
 void configQuadrotor::on_doubleSpinBox_angularVelocityControl_Z_I_valueChanged(double arg1)
 {
 //    quadrotor->setZ_IG((quint16)((float)arg1*1000));
+}
+
+void configQuadrotor::on_pushButton_recordIMU_released()
+{
+    if(ui->pushButton_recordIMU->text() != "Stop") {
+
+        file = new QFile(ui->lineEdit_recordIMU->text());
+        if (!file->open(QIODevice::WriteOnly | QIODevice::Text))
+            return;
+
+        out = new QTextStream(file);
+
+        ui->pushButton_recordIMU->setText("Stop");
+        ui->pushButton_recordIMU->setStyleSheet("background-color: rgb(255, 0, 0);");
+
+    } else {
+        ui->pushButton_recordIMU->setText("Start");
+        ui->pushButton_recordIMU->setStyleSheet("");
+        ui->lineEdit_recordIMU->text();
+
+        file->close();
+        delete out;
+        delete file;
+
+        out = NULL;
+        file = NULL;
+    }
+}
+
+
+void configQuadrotor::on_pushButton_calculate_offsets_released()
+{
+    quadrotor->calculate_AccOffset();
+}
+
+void configQuadrotor::on_spinBox_acelerometer_x_offset_valueChanged(int arg1)
+{
+    quadrotor->setX_AccOffset((quint16)(arg1));
+}
+
+void configQuadrotor::on_spinBox_acelerometer_y_offset_valueChanged(int arg1)
+{
+    quadrotor->setY_AccOffset((quint16)(arg1));
+}
+
+void configQuadrotor::on_spinBox_acelerometer_z_offset_valueChanged(int arg1)
+{
+    quadrotor->setZ_AccOffset((quint16)(arg1));
+}
+
+void configQuadrotor::on_pushButton_accelerometer_cleanPlots_released()
+{
+    ui->widget_plot_accelerometer_up->clean();
+    ui->widget_plot_accelerometer_mid->clean();
+    ui->widget_plot_accelerometer_down->clean();
 }

@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QList>
+#include <QFile>
+#include <QTextStream>
 #include "quadrotor.h"
 
 namespace Ui {
@@ -60,6 +62,18 @@ private slots:
 
     void on_pushButton_AngularControl_cleanPlots_released();
 
+    void on_pushButton_recordIMU_released();
+
+    void on_pushButton_calculate_offsets_released();
+
+    void on_spinBox_acelerometer_x_offset_valueChanged(int arg1);
+
+    void on_spinBox_acelerometer_y_offset_valueChanged(int arg1);
+
+    void on_spinBox_acelerometer_z_offset_valueChanged(int arg1);
+
+    void on_pushButton_accelerometer_cleanPlots_released();
+
 public slots:
     void receivedNewData(QList<int>);
     void receivedNewCommand(QByteArray);
@@ -67,6 +81,8 @@ public slots:
 private:
     Ui::configQuadrotor *ui;
     Quadrotor *quadrotor;
+    QFile *file;
+    QTextStream *out;
 };
 
 #endif // CONFIGQUADROTOR_H

@@ -167,7 +167,7 @@ void Plot::newData(QList<double> data) {
     double min=100000, max=-100000;
 
     if(data.size() < axisData.size()) {
-        qWarning("newData.size() != axisData.size()");
+        qWarning("newData.size()=%d != axisData.size()=%d",data.size(), axisData.size());
         return;
     }
 

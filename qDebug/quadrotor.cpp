@@ -24,6 +24,7 @@ Quadrotor::Quadrotor(QObject *parent) : QObject(parent) {
 }
 
 Quadrotor::~Quadrotor() {
+    serial->close();
     delete protocol;
     delete serial;
 }
@@ -149,3 +150,18 @@ void Quadrotor::setZ_GyroGain(quint16 value) {
     protocol->sendCommand(QString("ZE%1").arg(value).toAscii());
 }
 
+void Quadrotor::setX_AccOffset(quint16 value) {
+    protocol->sendCommand(QString("XF%1").arg(value).toAscii());
+}
+
+void Quadrotor::setY_AccOffset(quint16 value) {
+    protocol->sendCommand(QString("YF%1").arg(value).toAscii());
+}
+
+void Quadrotor::setZ_AccOffset(quint16 value) {
+    protocol->sendCommand(QString("ZF%1").arg(value).toAscii());
+}
+
+void Quadrotor::calculate_AccOffset(void) {
+    protocol->sendCommand(QString("F").toAscii());
+}

@@ -45,14 +45,17 @@ void sys_tick_handler(void)
         systick_counter++;
         systick_flag=1;
 
-	ADXL345_getValues();
 	ITG3200_getValues();
+	ADXL345_getValues();
+	ADXL345_filter();
 
 	if(!gyroscope_is_calibration_checked) {
 		if(!gyroscope_is_calibrated) {
 			ITG3200_calibrate();
 		} else {
 			ITG3200_check_calibration();
+			alfabeta[0].angle = 180.0*atan2((double)-accelerometer[0],(double)accelerometer[2])/M_PI;
+			alfabeta[1].angle = 180.0*atan2((double)-accelerometer[1],(double)accelerometer[2])/M_PI;
 		}
 		
 		return;

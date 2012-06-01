@@ -3,10 +3,13 @@
 
 #include <libopencm3/cm3/common.h>
 
-extern s16 acelerometer[3];
+extern s16 accelerometer[3];
+extern s16 accelerometer_raw[3];
+extern s16 accelerometer_offset[3];
 
 void ADXL345_setup();
 void ADXL345_getValues();
+void ADXL345_filter();
 
 
 

@@ -39,7 +39,7 @@
 #define LED_OFF()    gpio_clear (GPIOC, GPIO12)
 #define LED_TOGGLE() gpio_toggle(GPIOC, GPIO12)
 
-int output = 0;
+int output = 1;
 
 int main(void)
 {
@@ -106,26 +106,38 @@ int main(void)
 
 	while (1) {
 		static u32 count_2ms = 0;
+		u8 count_flag = 0;
 
 		if(systick_flag) {
 			systick_flag = 0;
 
 			count_2ms++; // 2ms
+			count_flag = 1;
 		}
 
 
 				switch(output) {
 				case 0:
+					if (!count_flag) break;
 					if ((count_2ms%(30/2)) != 0) break; // 30 ms
 					BMP085_getValues();
 					if(temperature<0 || pressure<0 ||altitude<0) break;
 					printf("%d.%dC %dPa %d.%dm\r\n", (int)(temperature/10), (int)temperature%10, (int)(pressure), (int)(altitude), (int)(altitude*1000)%1000);
 					break;
 				case 1:
+					if (!count_flag) break;
+					if ((count_2ms%(20/2)) != 0) break; // 30 ms
+					{
+					printf("%d %d %d\r\n", (int)acelerometer[0], (int)acelerometer[1], (int)acelerometer[2]);
+					}
+					break;
+				case 2:
+					if (!count_flag) break; else count_flag = 0;
 					if ((count_2ms%(30/2)) != 0) break; // 30 ms
 					printf("%d %d %d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100), (int)(gyroscope[1]*100), (int)(gyroscope[2]*100), (int)(angle[0]*100), (int)(angle[1]*100), (int)(angle[2]*100), (int)(180.0*atan2((double)-acelerometer[0],(double)acelerometer[2])/M_PI*100), (int)(-180.0*atan2((double)-acelerometer[1],(double)acelerometer[2])/M_PI*100));
 					break;
-				case 2:
+				case 3:
+					if (!count_flag) break; else count_flag = 0;
 					if ((count_2ms%(30/2)) != 0) break; // 30 ms
 					if(pid[2].P == 0.0 && pid[3].P == 0.0 ) {
 						printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100/14.375), (int)(joystick[1]*100), (int)(gyroscope[1]*100/14.375), (int)(-1*joystick[0]*100), (int)(gyroscope[2]*100/14.375), (int)(joystick[3]*100));
@@ -133,16 +145,18 @@ int main(void)
 						printf("%d %d %d %d %d %d\r\n", (int)(gyroscope[0]*100/14.375), (int)(omega_ref[0]*100), (int)(gyroscope[1]*100/14.375), (int)(-1*omega_ref[1]*100), (int)(gyroscope[2]*100/14.375), (int)(joystick[3]*100));
 					}
 					break;
-				case 3:
+				case 4:
+					if (!count_flag) break; else count_flag = 0;
 					if ((count_2ms%(30/2)) != 0) break; // 30 ms
 					printf("%d %d %d %d\r\n", (int)(angle[0]*100), (int)(joystick[0]*10), (int)(angle[1]*100), (int)(-1*joystick[1]*10));
 					break;
-				case 4:
+				case 5:
+					if (!count_flag) break; else count_flag = 0;
 					if ((count_2ms%(30/2)) != 0) break; // 30 ms
 //					printf("j%d %d %d %d %d %d %d %d\t", (int)joystick_update_count[0], (int)joystick_update_count[1], (int)joystick_update_count[2], (int)joystick_update_count[3], (int)joystick_update_count[4], (int)joystick_update_count[5], (int)joystick_update_count[6], (int)joystick_update_count[7]);
 					printf("%d %d %d %d %d %d %d %d\r\n", (int)joystick[0], (int)joystick[1], (int)joystick[2], (int)joystick[3], (int)joystick[4], (int)joystick[5], (int)joystick[6], (int)joystick[7]);
 					break;
-				case 5:
+				case 6:
 					{
 					char s[50];
 					int len;

@@ -1,6 +1,7 @@
 #include <libopencm3/stm32/f1/flash.h>
 #include "flash_.h"
 #include "pid.h"
+#include "ADXL345.h"
 #include "ITG3200.h"
 #include "estabilizador.h"
 #include "alfabeta.h"
@@ -66,14 +67,18 @@ u8 flash_load() {
 	RESTORE(estabilizador[1].offset, u16, tmp_u16);
 	RESTORE(estabilizador[1].ganancia, float, tmp_f);
 
-	RESTORE(alfabeta[0].P, u16, tmp_u16);
-	RESTORE(alfabeta[0].I, u16, tmp_u16);
-	RESTORE(alfabeta[1].P, u16, tmp_u16);
-	RESTORE(alfabeta[1].I, u16, tmp_u16);
+	RESTORE(alfabeta[0].P, float, tmp_f);
+	RESTORE(alfabeta[0].I, float, tmp_f);
+	RESTORE(alfabeta[1].P, float, tmp_f);
+	RESTORE(alfabeta[1].I, float, tmp_f);
 
 	RESTORE(gyroscope_gain[0], float, tmp_f);
 	RESTORE(gyroscope_gain[1], float, tmp_f);
 	RESTORE(gyroscope_gain[2], float, tmp_f);
+
+	RESTORE(accelerometer_offset[0], u16, tmp_u16);
+	RESTORE(accelerometer_offset[1], u16, tmp_u16);
+	RESTORE(accelerometer_offset[2], u16, tmp_u16);
 	return 1;
 }
 
@@ -132,6 +137,10 @@ void flash_save() {
 	SAVE(gyroscope_gain[0]);
 	SAVE(gyroscope_gain[1]);
 	SAVE(gyroscope_gain[2]);
+
+	SAVE(accelerometer_offset[0]);
+	SAVE(accelerometer_offset[1]);
+	SAVE(accelerometer_offset[2]);
 
 	flash_lock();
 
